@@ -1,0 +1,10 @@
+1. data 5개 사용하여 data_2가 data_1, data_3중 어떤 것과 유사한지 확인하고 Bit error rate와 correlation 확인
+2. loss function BCE를 RMSE로
+3. activation 전에 batch normalization 1)encoder만 2)encoder, decoder 같이
+4. metric: hamming distance, Randomness test
+
+[ 간단 ]
+- early stopping
+- cross validation (필요시)
+- hidden neuron수 튜닝 (64 변경, output128은 고정)
+- epoch, batch size 튜닝
