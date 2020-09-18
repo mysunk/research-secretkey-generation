@@ -1,2 +1,0 @@
-Alice-Bob 거리: 5m
-1cm (0.1 lambda)씩 이동
