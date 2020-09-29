@@ -6,7 +6,7 @@ class VAE(nn.Module):
 
     def __init__(self):
         super(VAE, self).__init__()
-        len_ = 52
+        len_ = 242
         hidden_layer = 64  # 갯수 수정 필요 아마 128
         self.fc1 = nn.Linear(len_, hidden_layer)
         self.bn1 = nn.BatchNorm1d(num_features=hidden_layer)
@@ -22,6 +22,8 @@ class VAE(nn.Module):
 
         self.fc4 = nn.Linear(hidden_layer, len_)
         self.bn4 = nn.BatchNorm1d(num_features=len_)
+
+        self.bn = nn.BatchNorm1d(num_features=hidden_layer * 2)
 
         for m in self.modules():
             if isinstance(m, nn.Linear):
@@ -63,12 +65,13 @@ class VAE(nn.Module):
         return h4
 
     def forward(self, x):
-        len_ = 52
+        len_ = 242
         # len_ = 64
         #       hidden_layer = 200
         mu, logvar = self.encode(x.view(-1, len_))
         z = self.reparameterize(mu, logvar)
         # print("reparameterize:", z.shape)
+        # z = self.bn(z) # bn
         z = self.latent_coded(z)
 
         z_coded = (z >= 0.5).int().float()
@@ -77,19 +80,18 @@ class VAE(nn.Module):
 #        return self.decode(z), z, mu, logvar
 
 def loss_function(recon_x, x, mu, logvar, z, z_coded):
-    len_ = 52
+    len_ = 242
     # len_ = 64
     recon_x = recon_x.double()
     x = x.double()
     # Loss term1: BCE to RMSE
-    RMSE = torch.sqrt(torch.mean((recon_x - x) ** 2))
+    loss_1 = torch.sqrt(torch.mean(recon_x - x).abs()) * 10
     # BCE = F.binary_cross_entropy(recon_x, x.view(-1, len_), reduction='mean')
-
     # see Appendix B from VAE paper:
     # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
     # https://arxiv.org/abs/1312.6114
     # 0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
-    KLD = -0.5 * torch.mean(1 + logvar - mu.pow(2) - logvar.exp())
+    loss_2 = -0.5 * torch.mean(1 + logvar - mu.pow(2) - logvar.exp())
     # MSE = torch.mean(torch.mean((z - z_coded).pow(2),axis=1))
-    MAE = torch.mean(torch.mean((z - z_coded).abs(), axis=1))
-    return RMSE + KLD + MAE
+    loss_3 = torch.mean(torch.mean((z - z_coded)**2, axis=1))
+    return loss_1 + loss_2 + loss_3

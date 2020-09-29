@@ -11,6 +11,7 @@ from os.path import isfile, join
 #Check model structure
 from torchsummary import summary
 from tqdm import *
+from load_dataset import *
 
 # modules
 from model import *
@@ -24,14 +25,13 @@ def train(model, batch_size, epochs):
     avg_valid_losses = []
 
     list_train = []
-
-    list_train_loss = []
-    list_valid_loss = []
+    # list_train_loss = []
+    # list_valid_loss = []
 
     patiences = 100
     delta = 0.001
     # initialize the early_stopping object
-    early_stopping = EarlyStopping(patience=patiences, verbose=True, delta=deltas)
+    early_stopping = EarlyStopping(patience=patiences, verbose=True, delta=delta)
 
     for epoch in range(1, epochs + 1):
         "train the model"
@@ -51,6 +51,7 @@ def train(model, batch_size, epochs):
             loss.backward()
             # perform a single optimization step (parameter update)
             optimizer.step()
+
             # record training loss
             train_losses.append(loss.item())
             list_train.append(z_coded)
@@ -64,6 +65,8 @@ def train(model, batch_size, epochs):
             recon_batch, z_coded, mu, logvar, z = model(data_noisy.float())
             loss = loss_function(recon_batch, data, mu, logvar, z, z_coded)
             valid_losses.append(loss.item())
+
+            # # early stopping
             # early_stopping(loss, model)
             # if early_stopping.early_stop:
             #    print("Earlystopping")
@@ -75,142 +78,79 @@ def train(model, batch_size, epochs):
         avg_valid_losses.append(valid_loss)
 
         epoch_len = len(str(epochs))
-
+        lr = optimizer.param_groups[0]['lr']
         print_msg = (f'[{epoch:>{epoch_len}}/{epochs:>{epoch_len}}] ' +
                      f'train_loss: {train_loss:.5f} ' +
-                     f'valid_loss: {valid_loss:.5f}')
+                     f'valid_loss: {valid_loss:.5f} ' + f'learning_rate : {lr}')
         print(print_msg)
 
-        # clear lists to track next epoch
+        early_stopping(valid_loss, model)
+        if early_stopping.early_stop:
+            print("Early stopping")
+            # save model
+            torch.save({
+                'epoch': args.epochs,
+                'batch_size': args.batch_size,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'train_loss': train_loss,
+                'valid_loss': valid_loss
+            }, save_dir + '/checkpoint.pt')
+            break
+
+        #clear lists to track next epoch
         train_losses = []
         valid_losses = []
+        # step learning rate
+        scheduler.step()
 
-        # early_stopping(valid_loss, model)
-        # if early_stopping.early_stop:
-        #    print("Early stopping")
-        #    break
+    # loss plot
+    plt.figure()
+    plt.plot(avg_train_losses, label='Train')
+    plt.plot(avg_valid_losses, label='Valid')
+    plt.xlabel('epoch')
+    plt.ylabel('loss')
+    plt.legend()
+    plt.savefig(save_dir + '/train.png')
+    plt.show()
 
-    model.load_state_dict(torch.load('checkpoint.pt'))
-    return (model, list_train, train_losses, valid_losses)
-
-def test(epoch):
-    test_losses = []
-    list_test = []
-    model.eval()
-    test_loss = 0.0
-    with torch.no_grad():
-        for i, data in enumerate(test_loader):
-            data = data.to(DEVICE)
-            recon_batch, z_coded, mu, logvar, z = model(data.float())
-            test_loss += loss_function(recon_batch, data, mu, logvar, z, z_coded).item()
-            test_losses.append(test_loss)
-            # print(i)
-            list_test.append(z_coded)
-
-    test_loss /= (i + 1)
-    print('====> Test set loss: {:.4f}'.format(test_loss))
-    return (list_test)
+    return (model, list_train, train_loss, valid_loss, early_stopping.early_stop)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch-size', type=int, default=1, metavar='N',
+    parser.add_argument('--batch_size', type=int, default=128, metavar='N',
                         help='input batch size for training (default: 128)')
-    parser.add_argument('--epochs', type=int, default=3000, metavar='N',
+    parser.add_argument('--epochs', type=int, default=100, metavar='N',
                         help='number of epochs to train (default: 10)')
     parser.add_argument('--no-cuda', action='store_true', default=False,
                         help='enables CUDA training')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
+    parser.add_argument('--num_workers', type=int, default=1, metavar='S')
     parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                         help='how many batches to wait before logging training status')
     parser.add_argument("--mode", default='client')
     parser.add_argument("--port", default=52162)
-    parser.add_argument('--learning_rate', type=float, default=1e-5, metavar='S',
+    parser.add_argument("--save_dir", default='results')
+    parser.add_argument('--learning_rate', type=float, default=1e-1, metavar='S',
                         help='random seed (default: 1)')
     parser.add_argument('-f')
     args = parser.parse_args()
     args.cuda = not args.no_cuda and torch.cuda.is_available()
-
     torch.manual_seed(args.seed)
 
-
-    def normalize_convert(CSI_data1):
-        max_v1 = np.max(CSI_data1)
-        min_v1 = np.min(CSI_data1)
-        CSI_data1 = (CSI_data1 - min_v1) / (max_v1 - min_v1)
-        return (CSI_data1)
-
-
-    def mean_data(CSI_data1, CSI_data2):
-        CSI_mean1 = (CSI_data1 + CSI_data2) / 2
-        return (CSI_mean1)
-
-
+    import os
     # Load data
-    path1 = F"data/sanitized_phase/sanitized_phase_1.csv"
-    path2 = F"data/sanitized_phase/sanitized_phase_2.csv"
-    path3 = F"data/sanitized_phase/sanitized_phase_3.csv"
-    path4 = F"data/sanitized_phase/sanitized_phase_4.csv"
+    path = F"data/Experiment_0924_gain/"
 
-    CSI_data1 = pd.read_csv(path1, header=None)
-    CSI_data2 = pd.read_csv(path2, header=None)
-    CSI_data3 = pd.read_csv(path3, header=None)
-    CSI_data4 = pd.read_csv(path4, header=None)
+    # model save dir
+    save_dir = args.save_dir
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
 
-    # Transpose
-    CSI_data1 = CSI_data1.values.T
-    CSI_data2 = CSI_data2.values.T
-    CSI_data3 = CSI_data3.values.T
-    CSI_data4 = CSI_data4.values.T
 
-    # Normalization, generating Mean_data
-    CSI_data1 = normalize_convert(CSI_data1)
-    CSI_data2 = normalize_convert(CSI_data2)
-    CSI_data3 = normalize_convert(CSI_data3)
-    CSI_data4 = normalize_convert(CSI_data4)
-
-    from sklearn import model_selection
-
-    CSI_data1_tr1, CSI_data1_te = model_selection.train_test_split(CSI_data1, test_size=0.2, shuffle=None)
-    CSI_data2_tr1, CSI_data2_te = model_selection.train_test_split(CSI_data2, test_size=0.2, shuffle=None)
-    CSI_data3_tr1, CSI_data3_te = model_selection.train_test_split(CSI_data3, test_size=0.2, shuffle=None)
-    CSI_data4_tr1, CSI_data4_te = model_selection.train_test_split(CSI_data4, test_size=0.2, shuffle=None)
-
-    CSI_data1_tr, CSI_data1_val = model_selection.train_test_split(CSI_data1_tr1, test_size=0.2, shuffle=None)
-    CSI_data2_tr, CSI_data2_val = model_selection.train_test_split(CSI_data2_tr1, test_size=0.2, shuffle=None)
-    CSI_data3_tr, CSI_data3_val = model_selection.train_test_split(CSI_data3_tr1, test_size=0.2, shuffle=None)
-    CSI_data4_tr, CSI_data4_val = model_selection.train_test_split(CSI_data4_tr1, test_size=0.2, shuffle=None)
-
-    CSI_mean1_tr = mean_data(CSI_data1_tr, CSI_data2_tr)
-    CSI_mean1_val = mean_data(CSI_data1_val, CSI_data2_val)
-    CSI_mean1_te = mean_data(CSI_data1_te, CSI_data2_te)
-
-    CSI_mean2_tr = mean_data(CSI_data3_tr, CSI_data4_tr)
-    CSI_mean2_val = mean_data(CSI_data3_val, CSI_data4_val)
-    CSI_mean2_te = mean_data(CSI_data3_te, CSI_data4_te)
-
-    # %%
-    # x_train_noisy = np.concatenate([CSI_data1_tr, CSI_data2_tr, CSI_data3_tr, CSI_data4_tr], axis=0)
-    # x_train = np.concatenate([CSI_mean1_tr, CSI_mean1_tr, CSI_mean2_tr, CSI_mean2_tr], axis=0)
-    # x_valid_noisy = np.concatenate([CSI_data1_val, CSI_data2_val, CSI_data3_val, CSI_data4_val], axis=0)
-    # x_valid = np.concatenate([CSI_mean1_val, CSI_mean1_val, CSI_mean2_val, CSI_mean2_val], axis=0)
-    # x_test = np.concatenate([CSI_data1_te, CSI_data2_te, CSI_data3_te, CSI_data4_te], axis=0)
-
-    #    x_train_noisy = np.concatenate([CSI_data1_tr, CSI_data2_tr, CSI_data3_tr, CSI_data4_tr], axis=0)
-    #    x_train = np.concatenate([CSI_mean1_tr, CSI_mean1_tr, CSI_mean2_tr, CSI_mean2_tr], axis=0)
-    #    x_valid_noisy = np.concatenate([CSI_data1_val, CSI_data2_val, CSI_data3_val, CSI_data4_val], axis=0)
-    #    x_valid = np.concatenate([CSI_mean1_val, CSI_mean1_val, CSI_mean2_val, CSI_mean2_val], axis=0)
-    #    x_test = np.concatenate([CSI_data1_te, CSI_data2_te, CSI_data3_te, CSI_data4_te], axis=0)
-
-    x_train_noisy = np.concatenate([CSI_data1_tr, CSI_data2_tr], axis=0)
-    x_train = np.concatenate([CSI_mean1_tr, CSI_mean1_tr], axis=0)
-    x_valid_noisy = np.concatenate([CSI_data1_val, CSI_data2_val], axis=0)
-    x_valid = np.concatenate([CSI_mean1_val, CSI_mean1_val], axis=0)
-    x_test = np.concatenate([CSI_data1_te, CSI_data2_te], axis=0)
-
-    # x_train1, x_valid = model_selection.train_test_split(input_data, test_size=0.2, shuffle=None)
-    # x_train_noisy1, x_valid_noisy = model_selection.train_test_split(input_data_noisy, tet_size=0.2, shuffle=None)
+    x_train_noisy, x_train, x_valid_noisy, x_valid, x_test, train_data_label, val_data_label, test_data_label = load_dataset(path, num_datas=4)
 
     train_set = torch.tensor(x_train)
     train_noisy_set = torch.tensor(x_train_noisy)
@@ -229,7 +169,7 @@ if __name__ == "__main__":
 
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     DEVICE = device
-    kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
+    kwargs = {'num_workers': args.num_workers, 'pin_memory': True} if args.cuda else {}
     train_loader = DataLoader(dataset=train_data,
                               batch_size=args.batch_size,
                               shuffle=True,
@@ -245,8 +185,18 @@ if __name__ == "__main__":
 
     model = VAE().to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
-    # summary(model, (64, 1600))
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
 
-    model, z_code_tr, train_loss, valid_loss = train(model, args.batch_size, args.epochs)
-    z_code_te = test(args.epochs)
+    #train
+    model, z_coded, train_loss, valid_loss, is_early_stopping = train(model, args.batch_size, args.epochs)
+
+    if not is_early_stopping:
+        # save model
+        torch.save({
+            'epoch': args.epochs,
+            'batch_size': args.batch_size,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'train_loss': train_loss,
+            'valid_loss': valid_loss
+        }, save_dir + '/checkpoint.pt')
