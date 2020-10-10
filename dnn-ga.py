@@ -9,7 +9,11 @@ import numpy as np
 import multiprocessing
 import warnings
 from copy import deepcopy
-from genome import Genome, genome_score
+from genome import Genome, genome_score, hamming_distance
+import time
+from util import *
+import pandas as pd
+from load_dataset import *
 warnings.filterwarnings(action='ignore')
 np.random.seed(76)
 
@@ -25,10 +29,10 @@ score_ini = 10e+10                              # 초기 점수
 batch_size = 32                                 # batch size
 input_length = 242                              # subcarrier 수
 output_length = 484                             # codeword length
-h1 = 20                                         # 히든레이어1 노드 수
+h1 = 128                                         # 히든레이어1 노드 수
 h2 = 26                                         # 히든레이어2 노드 수
 h3 = 10                                         # 히든레이어3 노드 수
-EPOCHS = 1000                                   # 반복 횟수
+EPOCHS = 100                                    # 반복 횟수
 early_stopping = 30                             # saturation시 early stopping
 crossover_fraction = 0.5                        # crossover 비율
 
@@ -74,6 +78,7 @@ n_gen = 1
 score_history = []
 high_score_history = []
 mean_score_history = []
+t_start = time.time()
 while n_gen <= EPOCHS:
     genomes = np.array(genomes)    
     while len(genomes)%CPU_CORE != 0:
@@ -82,7 +87,7 @@ while n_gen <= EPOCHS:
     
     for idx, _genomes in enumerate(genomes):
         if __name__ == '__main__':
-            pool = multiprocessing.Pool(processes=1)
+            pool = multiprocessing.Pool(processes=CPU_CORE)
             genomes[idx] = pool.map(genome_score, _genomes)
             pool.close()
             pool.join()
@@ -112,7 +117,9 @@ while n_gen <= EPOCHS:
     mean_score_history.append([n_gen, s])
     
     # 결과 출력
-    print('EPOCH #%s\tHistory Best Score: %s\tBest Score: %s\tMean Score: %s' % (n_gen, genomes[0].score, bs, s))    
+    t = time.time()
+    epoch_duration = (t - t_start)/n_gen
+    print('EPOCH #{}\tHistory Best Score: {:.2f}\tBest Score: {:.2f}\tMean Score: {:.2f}\t Avg time for 1 epoch: {:.2f} seconds'.format(n_gen, genomes[0].score, bs, s, epoch_duration))
     
     # 모델 업데이트
     best_genomes = deepcopy(genomes[:N_BEST])
@@ -149,8 +156,9 @@ while n_gen <= EPOCHS:
     if n_gen > early_stopping:
         last_scores = high_score_history[-1 * early_stopping:]
         sub_scores = list(map(lambda x: x[1], last_scores))
-        if np.argmax(sub_scores) == 0:
+        if np.argmin(sub_scores) == 0:
             print('No improvement, early stopping...')
+            EPOCHS = n_gen
             break
 
     n_gen += 1
@@ -171,5 +179,35 @@ plt.xlim(0, EPOCHS)
 plt.ylim(bottom=0)
 plt.xlabel('Epochs')
 plt.ylabel('Score')
+plt.savefig('results/1010/ga_train.png')
+plt.show()
 
+#%% check hamming distance
+# load dataset
+CSI_data_ref = pd.read_csv('gain_1.csv', header=None)
+CSI_data_ref = CSI_data_ref.values.T
+CSI_data_ref = minmax_norm(CSI_data_ref)
+
+CSI_data_2 = pd.read_csv('gain_5.csv', header=None)
+CSI_data_2 = CSI_data_2.values.T
+CSI_data_2 = minmax_norm(CSI_data_2)
+
+# predict
+codewords_ref = best_genomes[0].predict(CSI_data_ref)
+codewords_2 = best_genomes[0].predict(CSI_data_2)
+
+# plot
+dists = np.zeros((100, 2), dtype=int)
+# random sampling
+max_i = CSI_data_ref.shape[0]
+for i in range(100):
+    # for same sample
+    dists[i, 0] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0],:], codewords_ref[np.random.randint(0, max_i, 1)[0],:])
+    # for other
+    dists[i, 0] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0], :],
+                                   codewords_2[np.random.randint(0, max_i, 1)[0], :])
+
+plt.figure(figsize=(10,5))
+plt.boxplot(x=dists)
+# plt.xticks(rotation=30)
 plt.show()

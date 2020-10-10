@@ -62,24 +62,24 @@ class Genome():
         codewords = self.network.forward(data)
         return codewords
 
+def hamming_distance(x, y):
+    len_bit = max(len(x), len(y))
+    bin_x = x
+    bin_y = y
+
+    result = 0
+    for i in range(len_bit):
+        if bin_x[i] != bin_y[i]:
+            result += 1
+    return result
+
 def score(output):
-    def hamming_distance(x, y):
-        len_bit = max(len(x), len(y))
-        bin_x = x
-        bin_y = y
-
-        result = 0
-        for i in range(len_bit):
-            if bin_x[i] != bin_y[i]:
-                result += 1
-        return result
-
     sample_num = output.shape[0]
     distances = 0
     for i in range(sample_num-1):
         distances += hamming_distance(output[i], output[i+1])
-
-    return distances
+    distances_mean = distances / (sample_num-1)
+    return distances_mean
 
 def genome_score(genome):
     codewords = genome.predict(CSI_data)
