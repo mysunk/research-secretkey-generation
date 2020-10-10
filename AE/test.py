@@ -1,13 +1,9 @@
-from model import *
-import torch
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from load_dataset import *
+from AE.model import *
+from AE.load_dataset import *
 
 #%% Input
 num_workers = 1
-model_save_dir = 'results/0929/7/checkpoint.pt'
+model_save_dir = '../results/0929/7/checkpoint.pt'
 len_ = 52
 
 #%% main

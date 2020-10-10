@@ -5,37 +5,60 @@ Created on Fri Jun  5 22:54:56 2020
 @author: guseh
 """
 
-import numpy as np
 import multiprocessing
 import warnings
 from copy import deepcopy
 from genome import Genome, genome_score, hamming_distance
 import time
-from util import *
-import pandas as pd
-from load_dataset import *
+import argparse
+from AE.load_dataset import *
 warnings.filterwarnings(action='ignore')
 np.random.seed(76)
 
+# User input
+parser = argparse.ArgumentParser()
+parser.add_argument("--N_POPULATION", default=36, type=int)
+parser.add_argument("--N_BEST", default=5, type=int)
+parser.add_argument("--N_CHILDREN", default=7, type=int)
+parser.add_argument("--PROB_MUTATION", default=0.01, type=float)
+parser.add_argument("--mutation_std", default=1, type=float)
+parser.add_argument("--batch_size", default=32, type=int)
+parser.add_argument("--input_length", default=242, type=int)
+parser.add_argument("--output_length", default=484, type=int)
+parser.add_argument("--EPOCHS", default=100, type=int)
+parser.add_argument("--early_stopping", default=30, type=int)
+parser.add_argument("--h1", default=128, type=int)
+parser.add_argument("--h2", default=128, type=int)
+parser.add_argument("--h3", default=128, type=int)
+parser.add_argument("--result_save_dir", default='tmp', type=str)
+parser.add_argument("--crossover_fraction", default=0.5, type=float)
+args = parser.parse_args()
+
+
 #%% Hyperparameters
 CPU_CORE = multiprocessing.cpu_count()          # 멀티프로세싱 CPU 사용 수
-N_POPULATION = 36                               # 세대당 생성수
-N_BEST = 5                                      # 베스트 수
-N_CHILDREN = 7                                  # 자손 유전자 수
-PROB_MUTATION = 0.01                            # 돌연변이
-mutation_std = 1                                # 돌연변이시 standard deviation
 REVERSE = False                                 # 배열 순서 (False: ascending order, True: descending order) == maximize
 score_ini = 10e+10                              # 초기 점수
-batch_size = 32                                 # batch size
-input_length = 242                              # subcarrier 수
-output_length = 484                             # codeword length
-h1 = 128                                         # 히든레이어1 노드 수
-h2 = 26                                         # 히든레이어2 노드 수
-h3 = 10                                         # 히든레이어3 노드 수
-EPOCHS = 100                                    # 반복 횟수
-early_stopping = 30                             # saturation시 early stopping
-crossover_fraction = 0.5                        # crossover 비율
+batch_size = args.batch_size                    # batch size
+input_length = args.input_length                # subcarrier 수
+output_length = args.output_length              # codeword length
+h1 = args.h1                                    # 히든레이어1 노드 수
+h2 = args.h2                                    # 히든레이어2 노드 수
+h3 = args.h3                                    # 히든레이어3 노드 수
+EPOCHS = args.EPOCHS                            # 반복 횟수
+early_stopping = args.early_stopping            # saturation시 early stopping
+crossover_fraction = args.crossover_fraction    # crossover 비율
+N_POPULATION = args.N_POPULATION                # 세대당 생성수
+N_BEST = args.N_BEST                            # 베스트 수
+N_CHILDREN = args.N_CHILDREN                    # 자손 유전자 수
+PROB_MUTATION = args.PROB_MUTATION              # 돌연변이
+mutation_std = args.mutation_std                # 돌연변이시 standard deviation
 
+# plot save dir
+result_save_dir = 'results/'+args.result_save_dir
+import os
+if not os.path.exists(result_save_dir):
+    os.makedirs(result_save_dir)
 
 #%% Initial guess
 genomes = []
@@ -87,6 +110,7 @@ while n_gen <= EPOCHS:
     
     for idx, _genomes in enumerate(genomes):
         if __name__ == '__main__':
+            # hyper parameters
             pool = multiprocessing.Pool(processes=CPU_CORE)
             genomes[idx] = pool.map(genome_score, _genomes)
             pool.close()
@@ -179,16 +203,16 @@ plt.xlim(0, EPOCHS)
 plt.ylim(bottom=0)
 plt.xlabel('Epochs')
 plt.ylabel('Score')
-plt.savefig('results/1010/ga_train.png')
+plt.savefig(result_save_dir+'/ga_train.png')
 plt.show()
 
 #%% check hamming distance
 # load dataset
-CSI_data_ref = pd.read_csv('gain_1.csv', header=None)
+CSI_data_ref = pd.read_csv('data_in_use/gain_1.csv', header=None)
 CSI_data_ref = CSI_data_ref.values.T
 CSI_data_ref = minmax_norm(CSI_data_ref)
 
-CSI_data_2 = pd.read_csv('gain_5.csv', header=None)
+CSI_data_2 = pd.read_csv('data_in_use/gain_7.csv', header=None)
 CSI_data_2 = CSI_data_2.values.T
 CSI_data_2 = minmax_norm(CSI_data_2)
 
@@ -204,10 +228,12 @@ for i in range(100):
     # for same sample
     dists[i, 0] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0],:], codewords_ref[np.random.randint(0, max_i, 1)[0],:])
     # for other
-    dists[i, 0] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0], :],
+    dists[i, 1] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0], :],
                                    codewords_2[np.random.randint(0, max_i, 1)[0], :])
 
 plt.figure(figsize=(10,5))
 plt.boxplot(x=dists)
-# plt.xticks(rotation=30)
+plt.savefig(result_save_dir + '/hamming_dist.png')
+plt.ylabel('Hamming distance')
+plt.xlabel('Sample location #')
 plt.show()

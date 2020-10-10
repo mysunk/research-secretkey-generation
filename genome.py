@@ -1,12 +1,8 @@
-import numpy as np
 from scipy.special import expit
-import scipy.special as sc
-import pandas as pd
-from util import *
-from load_dataset import *
+from AE.load_dataset import *
 
 # load dataset
-CSI_data = pd.read_csv('gain_1.csv', header=None)
+CSI_data = pd.read_csv('data_in_use/gain_1.csv', header=None)
 CSI_data = CSI_data.values.T
 CSI_data = minmax_norm(CSI_data)
 
@@ -26,9 +22,6 @@ class network():
 
     def sigmoid(self, x):
         return expit(x)
-
-    def softmax(self, x):
-        return np.exp(x - sc.logsumexp(x))
 
     def linear(self, x):
         return x

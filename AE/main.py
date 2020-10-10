@@ -2,11 +2,11 @@ from __future__ import print_function
 import argparse
 import torch.utils.data
 from tqdm import *
-from load_dataset import *
+from AE.load_dataset import *
 
 # modules
-from model import *
-from util import *
+from AE.model import *
+from AE.util import *
 
 
 def train(model, epochs):

@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn import model_selection
-from util import *
+from AE.util import *
 
 def minmax_norm(CSI_data1):
     max_v1 = np.max(CSI_data1)
