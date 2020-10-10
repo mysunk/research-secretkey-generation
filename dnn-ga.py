@@ -189,7 +189,7 @@ while n_gen <= EPOCHS:
 
 print('==Process 2 Done==')
 
-#%% plot result
+#%% plot triain result
 import matplotlib.pyplot as plt
 score_history = np.array(score_history)
 high_score_history = np.array(high_score_history)
@@ -212,16 +212,21 @@ CSI_data_ref = pd.read_csv('data_in_use/gain_1.csv', header=None)
 CSI_data_ref = CSI_data_ref.values.T
 CSI_data_ref = minmax_norm(CSI_data_ref)
 
-CSI_data_2 = pd.read_csv('data_in_use/gain_7.csv', header=None)
+CSI_data_2 = pd.read_csv('data_in_use/gain_6.csv', header=None)
 CSI_data_2 = CSI_data_2.values.T
 CSI_data_2 = minmax_norm(CSI_data_2)
+
+CSI_data_3 = pd.read_csv('data_in_use/gain_8.csv', header=None)
+CSI_data_3 = CSI_data_3.values.T
+CSI_data_3 = minmax_norm(CSI_data_3)
 
 # predict
 codewords_ref = best_genomes[0].predict(CSI_data_ref)
 codewords_2 = best_genomes[0].predict(CSI_data_2)
+codewords_3 = best_genomes[0].predict(CSI_data_3)
 
 # plot
-dists = np.zeros((100, 2), dtype=int)
+dists = np.zeros((100, 3), dtype=int)
 # random sampling
 max_i = CSI_data_ref.shape[0]
 for i in range(100):
@@ -230,6 +235,9 @@ for i in range(100):
     # for other
     dists[i, 1] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0], :],
                                    codewords_2[np.random.randint(0, max_i, 1)[0], :])
+
+    dists[i, 2] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0], :],
+                                   codewords_3[np.random.randint(0, max_i, 1)[0], :])
 
 plt.figure(figsize=(10,5))
 plt.boxplot(x=dists)
