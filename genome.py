@@ -7,13 +7,9 @@ from load_dataset import *
 
 # load dataset
 CSI_data = pd.read_csv('data/Experiment_0924_gain/gain_1.csv', header=None)
-# Transpose
 CSI_data = CSI_data.values.T
-# Min-max normalization
 CSI_data = minmax_norm(CSI_data)
 
-
-# CSI_data = standard_norm(CSI_data)
 
 class network():
 
@@ -44,11 +40,12 @@ class network():
         net = self.linear(net)
         net = np.matmul(net, self.w3) + self.b3
         net = (net - np.mean(net)) / np.std(net)  # batch normalization
-        net = self.sigmoid(net)
+        net = self.linear(net)
         net = np.matmul(net, self.w4) + self.b4
         net = (net - np.mean(net)) / np.std(net)  # batch normalization
-        score = self.softmax(net)
+        score = self.sigmoid(net)
         # 이부분 수정 필요
+        score[score>0.5] = 1
         score = score.astype(int)
         return score
 

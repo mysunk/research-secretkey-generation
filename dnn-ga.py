@@ -9,19 +9,19 @@ import numpy as np
 import multiprocessing
 import warnings
 from copy import deepcopy
-from module.genome import Genome, genome_score
+from genome import Genome, genome_score
 warnings.filterwarnings(action='ignore')
 np.random.seed(76)
 
 #%% Hyperparameters
 CPU_CORE = multiprocessing.cpu_count()          # 멀티프로세싱 CPU 사용 수
 N_POPULATION = 36                               # 세대당 생성수
-N_BEST = 16                                     # 베스트 수
+N_BEST = 5                                      # 베스트 수
 N_CHILDREN = 7                                  # 자손 유전자 수
 PROB_MUTATION = 0.01                            # 돌연변이
 mutation_std = 1                                # 돌연변이시 standard deviation
 REVERSE = False                                 # 배열 순서 (False: ascending order, True: descending order) == maximize
-score_ini = 1e+10                               # 초기 점수
+score_ini = 10e+10                              # 초기 점수
 batch_size = 32                                 # batch size
 input_length = 242                              # subcarrier 수
 output_length = 484                             # codeword length
