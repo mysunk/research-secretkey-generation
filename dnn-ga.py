@@ -156,3 +156,20 @@ while n_gen <= EPOCHS:
     n_gen += 1
 
 print('==Process 2 Done==')
+
+#%% plot result
+import matplotlib.pyplot as plt
+score_history = np.array(score_history)
+high_score_history = np.array(high_score_history)
+mean_score_history = np.array(mean_score_history)
+
+plt.plot(score_history[:,0], score_history[:,1], '-o', label='BEST')
+plt.plot(high_score_history[:,0], high_score_history[:,1], '-o', label='High')
+plt.plot(mean_score_history[:,0], mean_score_history[:,1], '-o', label='Mean')
+plt.legend()
+plt.xlim(0, EPOCHS)
+plt.ylim(bottom=0)
+plt.xlabel('Epochs')
+plt.ylabel('Score')
+
+plt.show()

@@ -6,7 +6,7 @@ from util import *
 from load_dataset import *
 
 # load dataset
-CSI_data = pd.read_csv('data/Experiment_0924_gain/gain_1.csv', header=None)
+CSI_data = pd.read_csv('data/gain_201010/gain_1.csv', header=None)
 CSI_data = CSI_data.values.T
 CSI_data = minmax_norm(CSI_data)
 
