@@ -1,15 +1,6 @@
 from __future__ import print_function
 import argparse
 import torch.utils.data
-from torch import nn, optim
-from torch.nn import functional as F
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-from os import listdir
-from os.path import isfile, join
-#Check model structure
-from torchsummary import summary
 from tqdm import *
 from load_dataset import *
 
@@ -17,8 +8,8 @@ from load_dataset import *
 from model import *
 from util import *
 
-#%%
-def train(model, batch_size, epochs):
+
+def train(model, epochs):
     train_losses = []
     valid_losses = []
     avg_train_losses = []
@@ -35,7 +26,6 @@ def train(model, batch_size, epochs):
 
     for epoch in range(1, epochs + 1):
         "train the model"
-
         model.train()
         for batch, sample_data in tqdm(enumerate(train_loader, 1)):
             data = sample_data[0].to(DEVICE)
@@ -87,20 +77,12 @@ def train(model, batch_size, epochs):
         early_stopping(valid_loss, model)
         if early_stopping.early_stop:
             print("Early stopping")
-            # save model
-            torch.save({
-                'epoch': args.epochs,
-                'batch_size': args.batch_size,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'train_loss': train_loss,
-                'valid_loss': valid_loss
-            }, save_dir + '/checkpoint.pt')
             break
 
         #clear lists to track next epoch
         train_losses = []
         valid_losses = []
+
         # step learning rate
         scheduler.step()
 
@@ -114,14 +96,32 @@ def train(model, batch_size, epochs):
     plt.savefig(save_dir + '/train.png')
     plt.show()
 
-    return (model, list_train, train_loss, valid_loss, early_stopping.early_stop)
+    # reconstruction 확인
+    plt.figure()
+    plt.plot(data.cpu().detach().numpy().T, 'k')
+    plt.plot(recon_batch.cpu().detach().numpy().T, 'b:')
+    plt.savefig(save_dir + '/reconstruction.png')
+    plt.show()
 
+    # save model
+    torch.save({
+        'epoch': args.epochs,
+        'batch_size': args.batch_size,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'train_loss': train_loss,
+        'valid_loss': valid_loss,
+        'step_size': args.step_size,
+        'data_path':path
+    }, save_dir + '/checkpoint.pt')
+
+    return (model, list_train, train_loss, valid_loss)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--batch_size', type=int, default=128, metavar='N',
                         help='input batch size for training (default: 128)')
-    parser.add_argument('--epochs', type=int, default=100, metavar='N',
+    parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 10)')
     parser.add_argument('--no-cuda', action='store_true', default=False,
                         help='enables CUDA training')
@@ -132,8 +132,13 @@ if __name__ == "__main__":
                         help='how many batches to wait before logging training status')
     parser.add_argument("--mode", default='client')
     parser.add_argument("--port", default=52162)
+    parser.add_argument("--step_size", default=1, type = int)
+    parser.add_argument("--lr_decay_rate", default=0.1, type=float)
+    parser.add_argument("--lr_step_size", default=10, type=int)
+    parser.add_argument("--num_datas", default=4, type=int)
     parser.add_argument("--save_dir", default='results')
-    parser.add_argument('--learning_rate', type=float, default=1e-1, metavar='S',
+    parser.add_argument("--path", default='data/Experiment_0924_gain/')
+    parser.add_argument('--learning_rate', type=float, default=1e-3, metavar='S',
                         help='random seed (default: 1)')
     parser.add_argument('-f')
     args = parser.parse_args()
@@ -142,16 +147,16 @@ if __name__ == "__main__":
 
     import os
     # Load data
-    path = F"data/Experiment_0924_gain/"
+    # path = F"data/Experiment_0924_gain/"
+    path = args.path
 
     # model save dir
     save_dir = args.save_dir
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
-
-    x_train_noisy, x_train, x_valid_noisy, x_valid, x_test, train_data_label, val_data_label, test_data_label = load_dataset(path, num_datas=4)
-
+    x_train_noisy, x_train, x_valid_noisy, x_valid, x_test, train_data_label, val_data_label, test_data_label = load_dataset(path, num_datas = args.num_datas, step_size = args.step_size)
+    len_ = x_train.shape[1]
     train_set = torch.tensor(x_train)
     train_noisy_set = torch.tensor(x_train_noisy)
     valid_set = torch.tensor(x_valid)
@@ -183,20 +188,9 @@ if __name__ == "__main__":
                              shuffle=True,
                              **kwargs)
 
-    model = VAE().to(device)
+    model = VAE(len_).to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma = args.lr_decay_rate)
 
     #train
-    model, z_coded, train_loss, valid_loss, is_early_stopping = train(model, args.batch_size, args.epochs)
-
-    if not is_early_stopping:
-        # save model
-        torch.save({
-            'epoch': args.epochs,
-            'batch_size': args.batch_size,
-            'model_state_dict': model.state_dict(),
-            'optimizer_state_dict': optimizer.state_dict(),
-            'train_loss': train_loss,
-            'valid_loss': valid_loss
-        }, save_dir + '/checkpoint.pt')
+    model, z_coded, train_loss, valid_loss = train(model, args.epochs)

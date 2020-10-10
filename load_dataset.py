@@ -18,8 +18,7 @@ def standard_norm(CSI_data1):
     CSI_data1 = (CSI_data1 - mean_) / std_
     return (CSI_data1)
 
-def load_dataset(path, num_datas):
-    num_samples = 500
+def load_dataset(path, num_datas, step_size):
     train_datas, val_datas, test_datas = [], [], []
     train_labels, val_labels, test_labels = [], [], []
     for i in range(1, 1 + num_datas):
@@ -28,13 +27,12 @@ def load_dataset(path, num_datas):
         # Transpose
         CSI_data = CSI_data.values.T
         # 100개만 남김
-        CSI_data = CSI_data[:num_samples, :]
         # Min-max normalization
         CSI_data = minmax_norm(CSI_data)
         # CSI_data = standard_norm(CSI_data)
 
         # Make label
-        label = np.ones((num_samples,), dtype=int) * i
+        label = np.ones((CSI_data.shape[0],), dtype=int) * i
 
         # train-test split
         CSI_data1_tr1, CSI_data1_te, label_tr1, label_te = model_selection.train_test_split(CSI_data, label, test_size=0.2,
@@ -54,10 +52,11 @@ def load_dataset(path, num_datas):
     train_datas_noisy, val_datas_noisy, test_datas_noisy = [], [], []
     train_datas_mean, val_datas_mean = [], []
     train_data_label, val_data_label, test_data_label = [], [], []
-    for i in range(num_datas - 1):
+
+    for i in range(0,num_datas - 1,step_size):
         CSI_mean1_tr = mean_data(train_datas[i], train_datas[i + 1])
         CSI_mean1_val = mean_data(val_datas[i], val_datas[i + 1])
-        CSI_mean1_te = mean_data(test_datas[i], test_datas[i + 1])
+        # CSI_mean1_te = mean_data(test_datas[i], test_datas[i + 1])
 
         train_datas_mean.append(CSI_mean1_tr)
         train_datas_mean.append(CSI_mean1_tr)
