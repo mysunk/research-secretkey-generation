@@ -25,7 +25,7 @@ parser.add_argument("--mutation_std", default=1, type=float)
 parser.add_argument("--batch_size", default=32, type=int)
 parser.add_argument("--input_length", default=242, type=int)
 parser.add_argument("--output_length", default=484, type=int)
-parser.add_argument("--EPOCHS", default=100, type=int)
+parser.add_argument("--EPOCHS", default=3, type=int)
 parser.add_argument("--early_stopping", default=30, type=int)
 parser.add_argument("--h1", default=128, type=int)
 parser.add_argument("--h2", default=128, type=int)
@@ -190,6 +190,10 @@ while n_gen <= EPOCHS:
 print('==Process 2 Done==')
 
 #%% plot triain result
+import matplotlib
+font = {'size':15}
+matplotlib.rc('font',**font)
+
 import matplotlib.pyplot as plt
 score_history = np.array(score_history)
 high_score_history = np.array(high_score_history)
@@ -214,7 +218,7 @@ CSI_data_ref = minmax_norm(CSI_data_ref)
 
 # load all
 CSI_datas = []
-for i in range(1,41):
+for i in range(1,8):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
@@ -239,17 +243,23 @@ for j in range(len(CSI_datas)):
         dists[i, j] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
         dists_same_loc[i,j] = hamming_distance(codewords_2[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
 
+locs = np.arange(0, 0.06*7, 0.06)
+
 plt.figure(figsize=(10,5))
 plt.boxplot(x=dists)
+plt.xticks(range(7)[::2], locs[::2])
 plt.ylabel('Hamming distance')
-plt.xlabel('Sample location #')
+# plt.xlabel('Sample location #')
+plt.xlabel('d / lambda')
 plt.savefig(result_save_dir + '/hamming_dist.png')
 # plt.show()
 
 plt.figure(figsize=(10,5))
 plt.boxplot(x=dists_same_loc)
+plt.xticks(range(7)[::2], locs[::2])
 plt.ylabel('Hamming distance')
-plt.xlabel('Sample location #')
+# plt.xlabel('Sample location #')
+plt.xlabel('d / lambda')
 plt.savefig(result_save_dir + '/hamming_dist_same_loc.png')
 # plt.show()
 
