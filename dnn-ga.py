@@ -13,7 +13,6 @@ import time
 import argparse
 from AE.load_dataset import *
 warnings.filterwarnings(action='ignore')
-np.random.seed(76)
 
 # User input
 parser = argparse.ArgumentParser()
@@ -32,6 +31,7 @@ parser.add_argument("--h2", default=128, type=int)
 parser.add_argument("--h3", default=128, type=int)
 parser.add_argument("--result_save_dir", default='tmp', type=str)
 parser.add_argument("--crossover_fraction", default=0.5, type=float)
+parser.add_argument("--random_seed", default=76, type=int)
 args = parser.parse_args()
 
 
@@ -39,6 +39,7 @@ args = parser.parse_args()
 CPU_CORE = multiprocessing.cpu_count()          # 멀티프로세싱 CPU 사용 수
 REVERSE = False                                 # 배열 순서 (False: ascending order, True: descending order) == maximize
 score_ini = 10e+10                              # 초기 점수
+np.random.seed(args.random_seed)                # random seed
 batch_size = args.batch_size                    # batch size
 input_length = args.input_length                # subcarrier 수
 output_length = args.output_length              # codeword length
@@ -208,7 +209,7 @@ plt.ylim(bottom=0)
 plt.xlabel('Epochs')
 plt.ylabel('Score')
 plt.savefig(result_save_dir+'/ga_train.png')
-plt.show()
+# plt.show()
 
 #%% check hamming distance
 # load dataset
@@ -218,7 +219,8 @@ CSI_data_ref = minmax_norm(CSI_data_ref)
 
 # load all
 CSI_datas = []
-for i in range(1,8):
+num_samples = 14
+for i in range(1, num_samples + 1):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
@@ -243,11 +245,12 @@ for j in range(len(CSI_datas)):
         dists[i, j] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
         dists_same_loc[i,j] = hamming_distance(codewords_2[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
 
-locs = np.arange(0, 0.06*7, 0.06)
+
+locs = np.arange(0, 0.06*num_samples, 0.06)
 
 plt.figure(figsize=(10,5))
 plt.boxplot(x=dists)
-plt.xticks(range(7)[::2], locs[::2])
+plt.xticks(range(num_samples)[::2], locs[::2])
 plt.ylabel('Hamming distance')
 # plt.xlabel('Sample location #')
 plt.xlabel('d / lambda')
@@ -256,7 +259,7 @@ plt.savefig(result_save_dir + '/hamming_dist.png')
 
 plt.figure(figsize=(10,5))
 plt.boxplot(x=dists_same_loc)
-plt.xticks(range(7)[::2], locs[::2])
+plt.xticks(range(num_samples)[::2], locs[::2])
 plt.ylabel('Hamming distance')
 # plt.xlabel('Sample location #')
 plt.xlabel('d / lambda')
