@@ -83,14 +83,13 @@ def score(CSI_data, output, codeword_ref):
     # for i in range(sample_num-1):
     #     distances += hamming_distance(output[i], output[i+1])
     # distances_mean = distances / (sample_num-1)
-
-    distance_X = np.linalg.norm(X_GNT - CSI_data)
+    ratio_factor = 1
+    distance_X = np.linalg.norm(X_GNT - CSI_data, axis=1)
     distances_C = np.zeros((output.shape[0]))
 
     for i in range(output.shape[0]):
-        distances_C[i] = hamming_distance(codeword_ref, output[i])
-
-    return np.abs(distance_X.mean() - distances_C.mean()) ** 2
+        distances_C[i] = hamming_distance(np.ravel(codeword_ref), output[i])
+    return np.sqrt(np.mean((distance_X * ratio_factor - distances_C)**2))
 
 def genome_score(genome):
     codeword_ref = genome.predict(X_GNT)

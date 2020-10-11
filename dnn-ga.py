@@ -212,36 +212,47 @@ CSI_data_ref = pd.read_csv('data_in_use/gain_1.csv', header=None)
 CSI_data_ref = CSI_data_ref.values.T
 CSI_data_ref = minmax_norm(CSI_data_ref)
 
-CSI_data_2 = pd.read_csv('data_in_use/gain_6.csv', header=None)
-CSI_data_2 = CSI_data_2.values.T
-CSI_data_2 = minmax_norm(CSI_data_2)
-
-CSI_data_3 = pd.read_csv('data_in_use/gain_8.csv', header=None)
-CSI_data_3 = CSI_data_3.values.T
-CSI_data_3 = minmax_norm(CSI_data_3)
+# load all
+CSI_datas = []
+for i in range(1,41):
+    CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
+    # Transpose
+    CSI_data = CSI_data.values.T
+    # Min-max normalization
+    CSI_data = minmax_norm(CSI_data)
+    CSI_datas.append(CSI_data)
 
 # predict
 codewords_ref = best_genomes[0].predict(CSI_data_ref)
-codewords_2 = best_genomes[0].predict(CSI_data_2)
-codewords_3 = best_genomes[0].predict(CSI_data_3)
 
 # plot
-dists = np.zeros((100, 3), dtype=int)
+dists = np.zeros((100, len(CSI_datas)), dtype=int)
+dists_same_loc = np.zeros((100, len(CSI_datas)), dtype=int)
 # random sampling
 max_i = CSI_data_ref.shape[0]
-for i in range(100):
-    # for same sample
-    dists[i, 0] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0],:], codewords_ref[np.random.randint(0, max_i, 1)[0],:])
-    # for other
-    dists[i, 1] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0], :],
-                                   codewords_2[np.random.randint(0, max_i, 1)[0], :])
-
-    dists[i, 2] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0], :],
-                                   codewords_3[np.random.randint(0, max_i, 1)[0], :])
+codewords = []
+for j in range(len(CSI_datas)):
+    codewords_2 = best_genomes[0].predict(CSI_datas[j])
+    codewords.append(codewords_2)
+    for i in range(100):
+        # for same sample
+        dists[i, j] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
+        dists_same_loc[i,j] = hamming_distance(codewords_2[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
 
 plt.figure(figsize=(10,5))
 plt.boxplot(x=dists)
-plt.savefig(result_save_dir + '/hamming_dist.png')
 plt.ylabel('Hamming distance')
 plt.xlabel('Sample location #')
-plt.show()
+plt.savefig(result_save_dir + '/hamming_dist.png')
+# plt.show()
+
+plt.figure(figsize=(10,5))
+plt.boxplot(x=dists_same_loc)
+plt.ylabel('Hamming distance')
+plt.xlabel('Sample location #')
+plt.savefig(result_save_dir + '/hamming_dist_same_loc.png')
+# plt.show()
+
+# save codewords
+codewords = pd.DataFrame(data = np.concatenate(codewords, axis=0))
+codewords.to_csv(result_save_dir+'/codewords.csv', index=False)
