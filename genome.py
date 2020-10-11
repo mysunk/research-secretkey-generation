@@ -1,11 +1,22 @@
 from scipy.special import expit
 from AE.load_dataset import *
 
-# load dataset
-CSI_data = pd.read_csv('data_in_use/gain_1.csv', header=None)
-CSI_data = CSI_data.values.T
-CSI_data = minmax_norm(CSI_data)
+# load GNT
+CSI_data_ref = pd.read_csv('data_in_use/gain_1.csv', header=None)
+CSI_data_ref = CSI_data_ref.values.T
+CSI_data_ref = minmax_norm(CSI_data_ref)
+X_GNT = np.mean(CSI_data_ref, axis=0)
 
+# load all
+CSI_datas = []
+for i in range(1,9,2):
+    CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
+    # Transpose
+    CSI_data = CSI_data.values.T
+    # Min-max normalization
+    CSI_data = minmax_norm(CSI_data)
+    CSI_datas.append(CSI_data)
+CSI_datas = np.concatenate(CSI_datas, axis=0)
 
 class network():
 
@@ -66,15 +77,23 @@ def hamming_distance(x, y):
             result += 1
     return result
 
-def score(output):
-    sample_num = output.shape[0]
-    distances = 0
-    for i in range(sample_num-1):
-        distances += hamming_distance(output[i], output[i+1])
-    distances_mean = distances / (sample_num-1)
-    return distances_mean
+def score(CSI_data, output, codeword_ref):
+    # sample_num = output.shape[0]
+    # distances = 0
+    # for i in range(sample_num-1):
+    #     distances += hamming_distance(output[i], output[i+1])
+    # distances_mean = distances / (sample_num-1)
+
+    distance_X = np.linalg.norm(X_GNT - CSI_data)
+    distances_C = np.zeros((output.shape[0]))
+
+    for i in range(output.shape[0]):
+        distances_C[i] = hamming_distance(codeword_ref, output[i])
+
+    return np.abs(distance_X.mean() - distances_C.mean()) ** 2
 
 def genome_score(genome):
-    codewords = genome.predict(CSI_data)
-    genome.score = score(codewords)
+    codeword_ref = genome.predict(X_GNT)
+    codewords = genome.predict(CSI_datas)
+    genome.score = score(CSI_datas, codewords, codeword_ref)
     return genome
