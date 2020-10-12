@@ -34,17 +34,20 @@ class network():
     def sigmoid(self, x):
         return expit(x)
 
+    def relu(self, x):
+        return x * (x > 0)
+
     def linear(self, x):
         return x
 
     def forward(self, inputs):
         net = np.matmul(inputs, self.w1) + self.b1
-        net = self.linear(net)
+        net = self.relu(net)
         net = np.matmul(net, self.w2) + self.b2
-        net = self.linear(net)
+        net = self.relu(net)
         net = np.matmul(net, self.w3) + self.b3
         net = (net - np.mean(net)) / np.std(net)  # batch normalization
-        net = self.linear(net)
+        net = self.relu(net)
         net = np.matmul(net, self.w4) + self.b4
         net = (net - np.mean(net)) / np.std(net)  # batch normalization
         score = self.sigmoid(net)
