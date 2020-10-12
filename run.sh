@@ -18,4 +18,16 @@
 # python dnn-ga.py --result_save_dir=1012/2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=1
 # python dnn-ga.py --result_save_dir=1012/3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=2
 # python dnn-ga.py --result_save_dir=1012/4 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=3
-python dnn-ga.py --result_save_dir=1012/5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=1
+# python dnn-ga.py --result_save_dir=1012/5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=1
+# python dnn-ga.py --result_save_dir=1013/1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=1
+# python dnn-ga.py --result_save_dir=1013/2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=2
+# python dnn-ga.py --result_save_dir=1013/3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=3
+# python dnn-ga.py --result_save_dir=1013/4 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=4
+# python dnn-ga.py --result_save_dir=1013/5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=5
+# python dnn-ga.py --result_save_dir=1013/6 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=6
+# python dnn-ga.py --result_save_dir=1013/7 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=7
+# python dnn-ga.py --result_save_dir=1013/8 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=8
+# python dnn-ga.py --result_save_dir=1013/9 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=9
+python dnn-ga.py --result_save_dir=1013/10 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=10
+python dnn-ga.py --result_save_dir=1013/11 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=11
+python dnn-ga.py --result_save_dir=1013/12 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=12

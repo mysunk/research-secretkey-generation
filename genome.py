@@ -81,26 +81,52 @@ def hamming_distance(x, y):
     return result
 
 def score(CSI_data, output, codeword_ref, score_type):
-    # sample_num = output.shape[0]
-    # distances = 0
-    # for i in range(sample_num-1):
-    #     distances += hamming_distance(output[i], output[i+1])
-    # distances_mean = distances / (sample_num-1)
-    ratio_factor = 10
+    # calculate distance of X and C
     distance_X = np.linalg.norm(X_GNT - CSI_data, axis=1)
     distances_C = np.zeros((output.shape[0]))
-
     for i in range(output.shape[0]):
         distances_C[i] = hamming_distance(np.ravel(codeword_ref), output[i])
 
+    # varying ratio factor
     if score_type == 1:
-        return np.sqrt(np.mean((distance_X*ratio_factor - distances_C)**2))
+        ratio_factor = 1
     elif score_type == 2:
-        return np.sqrt(np.mean((distances_C) ** 2))
+        ratio_factor = 30
     elif score_type == 3:
-        return np.sqrt(np.mean((distance_X) ** 2))
+        ratio_factor = np.exp(distance_X)
+    elif score_type == 4:
+        ratio_factor = np.exp(distance_X)*3
+    elif score_type == 5:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 17.5
+    elif score_type == 6:
+        ratio_factor = np.nanmax(distances_C / distance_X)
+    elif score_type == 7:
+        ratio_factor = np.median(codeword_ref) / np.median(X_GNT)
+    elif score_type == 8:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 30
+    elif score_type == 9:
+        ratio_factor = np.exp(distance_X)*5
+    elif score_type == 10:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = 242 / distance_X[distance_X > 1]
+    elif score_type == 11:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 40
+    elif score_type == 12:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 50
     else:
-        return np.sqrt(np.mean((distance_X - distances_C) ** 2))
+        raise NotImplementedError('Not implemented type of score function')
+
+    return np.sqrt(np.mean((distance_X * ratio_factor - distances_C) ** 2))
+
 
 def genome_score(genome, score_type):
     codeword_ref = genome.predict(X_GNT)
