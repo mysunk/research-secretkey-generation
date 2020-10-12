@@ -24,7 +24,7 @@ parser.add_argument("--mutation_std", default=1, type=float)
 parser.add_argument("--batch_size", default=32, type=int)
 parser.add_argument("--input_length", default=242, type=int)
 parser.add_argument("--output_length", default=484, type=int)
-parser.add_argument("--EPOCHS", default=3, type=int)
+parser.add_argument("--EPOCHS", default=100, type=int)
 parser.add_argument("--early_stopping", default=30, type=int)
 parser.add_argument("--h1", default=128, type=int)
 parser.add_argument("--h2", default=128, type=int)
@@ -32,6 +32,7 @@ parser.add_argument("--h3", default=128, type=int)
 parser.add_argument("--result_save_dir", default='tmp', type=str)
 parser.add_argument("--crossover_fraction", default=0.5, type=float)
 parser.add_argument("--random_seed", default=76, type=int)
+parser.add_argument("--score_type", default=0, type=int)
 args = parser.parse_args()
 
 
@@ -111,9 +112,11 @@ while n_gen <= EPOCHS:
     
     for idx, _genomes in enumerate(genomes):
         if __name__ == '__main__':
+            from _functools import partial
+            partial_func = partial(genome_score, score_type = args.score_type)
             # hyper parameters
             pool = multiprocessing.Pool(processes=CPU_CORE)
-            genomes[idx] = pool.map(genome_score, _genomes)
+            genomes[idx] = pool.map(partial_func, _genomes)
             pool.close()
             pool.join()
     genomes = list(genomes.reshape(genomes.shape[0]*genomes.shape[1]))    
@@ -219,7 +222,7 @@ CSI_data_ref = minmax_norm(CSI_data_ref)
 
 # load all
 CSI_datas = []
-num_samples = 14
+num_samples = 40
 for i in range(1, num_samples + 1):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose

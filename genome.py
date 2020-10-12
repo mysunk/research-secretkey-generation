@@ -80,22 +80,30 @@ def hamming_distance(x, y):
             result += 1
     return result
 
-def score(CSI_data, output, codeword_ref):
+def score(CSI_data, output, codeword_ref, score_type):
     # sample_num = output.shape[0]
     # distances = 0
     # for i in range(sample_num-1):
     #     distances += hamming_distance(output[i], output[i+1])
     # distances_mean = distances / (sample_num-1)
-    ratio_factor = 1
+    ratio_factor = 10
     distance_X = np.linalg.norm(X_GNT - CSI_data, axis=1)
     distances_C = np.zeros((output.shape[0]))
 
     for i in range(output.shape[0]):
         distances_C[i] = hamming_distance(np.ravel(codeword_ref), output[i])
-    return np.sqrt(np.mean((distance_X * ratio_factor - distances_C)**2))
 
-def genome_score(genome):
+    if score_type == 1:
+        return np.sqrt(np.mean((distance_X*ratio_factor - distances_C)**2))
+    elif score_type == 2:
+        return np.sqrt(np.mean((distances_C) ** 2))
+    elif score_type == 3:
+        return np.sqrt(np.mean((distance_X) ** 2))
+    else:
+        return np.sqrt(np.mean((distance_X - distances_C) ** 2))
+
+def genome_score(genome, score_type):
     codeword_ref = genome.predict(X_GNT)
     codewords = genome.predict(CSI_datas)
-    genome.score = score(CSI_datas, codewords, codeword_ref)
+    genome.score = score(CSI_datas, codewords, codeword_ref, score_type)
     return genome
