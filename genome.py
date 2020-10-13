@@ -122,6 +122,10 @@ def score(CSI_data, output, codeword_ref, score_type):
         ratio_factor = np.zeros(distance_X.shape)
         ratio_factor[distance_X <= 1] = 0
         ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 50
+    elif score_type == 13:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 60
     else:
         raise NotImplementedError('Not implemented type of score function')
 
