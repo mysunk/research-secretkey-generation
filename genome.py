@@ -1,5 +1,11 @@
 from scipy.special import expit
-from AE.load_dataset import *
+import pandas as pd
+import numpy as np
+def minmax_norm(CSI_data1):
+    max_v1 = np.max(CSI_data1)
+    min_v1 = np.min(CSI_data1)
+    CSI_data1 = (CSI_data1 - min_v1) / (max_v1 - min_v1)
+    return (CSI_data1)
 
 # load GNT
 CSI_data_ref = pd.read_csv('data_in_use/gain_1.csv', header=None)
@@ -9,7 +15,7 @@ X_GNT = np.mean(CSI_data_ref, axis=0)
 
 # load all
 CSI_datas = []
-for i in range(1,9,2):
+for i in range(1,12,1):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
@@ -52,7 +58,7 @@ class network():
         net = (net - np.mean(net)) / np.std(net)  # batch normalization
         score = self.sigmoid(net)
         # 이부분 수정 필요
-        score[score>0.5] = 1
+        score[score > 0.5] = 1
         score = score.astype(int)
         return score
 
@@ -61,6 +67,9 @@ class Genome():
 
     def __init__(self, score_ini, input_length, output_length, h1, h2, h3, batch_size, init_weight=None):
         self.network = network(input_length, output_length, h1, h2, h3, init_weight=None)
+
+        self.dist_X = None
+        self.dist_C = None
 
         # 평가 점수 초기화
         self.score = score_ini
@@ -86,8 +95,21 @@ def score(CSI_data, output, codeword_ref, score_type):
     distances_C = np.zeros((output.shape[0]))
     for i in range(output.shape[0]):
         distances_C[i] = hamming_distance(np.ravel(codeword_ref), output[i])
+    # vaying score function
+    ratio_factor = np.zeros(distance_X.shape)
+    ratio_factor[distance_X <= 1] = 0
+    ratio_factor[distance_X > 1] = score_type * 10
+    return distance_X, distances_C, np.sqrt(np.mean((distance_X * ratio_factor - distances_C) ** 2))
 
-    # varying ratio factor
+
+def genome_score(genome, score_type):
+    codeword_ref = genome.predict(X_GNT)
+    codewords = genome.predict(CSI_datas)
+    genome.dist_X, genome.dist_C, genome.score = score(CSI_datas, codewords, codeword_ref, score_type)
+    return genome
+
+""" 1013
+ # varying ratio factor
     if score_type == 1:
         ratio_factor = 1
     elif score_type == 2:
@@ -128,12 +150,4 @@ def score(CSI_data, output, codeword_ref, score_type):
         ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 60
     else:
         raise NotImplementedError('Not implemented type of score function')
-
-    return np.sqrt(np.mean((distance_X * ratio_factor - distances_C) ** 2))
-
-
-def genome_score(genome, score_type):
-    codeword_ref = genome.predict(X_GNT)
-    codewords = genome.predict(CSI_datas)
-    genome.score = score(CSI_datas, codewords, codeword_ref, score_type)
-    return genome
+"""
