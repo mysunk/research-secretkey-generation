@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--result_save_dir", default='tmp', type=str)
+parser.add_argument("--result_save_dir", default='1014_2/1', type=str)
 args = parser.parse_args()
 result_save_dir = 'results/' + args.result_save_dir
 

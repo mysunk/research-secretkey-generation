@@ -15,7 +15,7 @@ X_GNT = np.mean(CSI_data_ref, axis=0)
 
 # load all
 CSI_datas = []
-for i in range(1,12,1):
+for i in range(1,11,1):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
@@ -89,17 +89,25 @@ def hamming_distance(x, y):
             result += 1
     return result
 
-def score(CSI_data, output, codeword_ref, score_type):
+def score(X, output, C_GNT, score_type):
     # calculate distance of X and C
-    distance_X = np.linalg.norm(X_GNT - CSI_data, axis=1)
+    distance_X = np.linalg.norm(X_GNT - X, axis=1)
     distances_C = np.zeros((output.shape[0]))
     for i in range(output.shape[0]):
-        distances_C[i] = hamming_distance(np.ravel(codeword_ref), output[i])
+        distances_C[i] = hamming_distance(np.ravel(C_GNT), output[i])
     # vaying score function
-    ratio_factor = np.zeros(distance_X.shape)
-    ratio_factor[distance_X <= 1] = 0
-    ratio_factor[distance_X > 1] = score_type * 10
-    return distance_X, distances_C, np.sqrt(np.mean((distance_X * ratio_factor - distances_C) ** 2))
+    if score_type == 1:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = 0.5 / distance_X[distance_X > 1]
+    elif score_type == 2:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = np.exp(distance_X[distance_X > 1])
+    else:
+        raise NotImplementedError('Not implemented type of score function')
+    score_val = np.mean(np.abs(distance_X * ratio_factor - distances_C / output.shape[1]))
+    return distance_X, distances_C, score_val
 
 
 def genome_score(genome, score_type):

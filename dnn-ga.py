@@ -11,7 +11,7 @@ from copy import deepcopy
 from genome import Genome, genome_score, hamming_distance
 import time
 import argparse
-from AE.load_dataset import *
+import numpy as np
 warnings.filterwarnings(action='ignore')
 
 # User input
@@ -38,6 +38,7 @@ args = parser.parse_args()
 
 #%% Hyperparameters
 CPU_CORE = multiprocessing.cpu_count()          # 멀티프로세싱 CPU 사용 수
+print(f'Use CPU_CORE: {CPU_CORE}')
 REVERSE = False                                 # 배열 순서 (False: ascending order, True: descending order) == maximize
 score_ini = 10e+10                              # 초기 점수
 np.random.seed(args.random_seed)                # random seed
@@ -212,6 +213,7 @@ plt.ylim(bottom=0)
 plt.xlabel('Epochs')
 plt.ylabel('Score')
 plt.tight_layout()
+plt.text(0,0.1,'start score: '+str(high_score_history[:,1][0])+'///end score: '+str(high_score_history[:,1][-1]))
 plt.savefig(result_save_dir+'/ga_train.png')
 # plt.show()
 
