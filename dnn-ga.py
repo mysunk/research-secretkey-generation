@@ -32,7 +32,7 @@ parser.add_argument("--h3", default=484, type=int)
 parser.add_argument("--result_save_dir", default='tmp', type=str)
 parser.add_argument("--crossover_fraction", default=0.5, type=float)
 parser.add_argument("--random_seed", default=76, type=int)
-parser.add_argument("--score_type", default=4, type=int)
+parser.add_argument("--score_type", default=1, type=int)
 args = parser.parse_args()
 
 
@@ -148,7 +148,7 @@ while n_gen <= EPOCHS:
     # 결과 출력
     t = time.time()
     epoch_duration = (t - t_start)/n_gen
-    print('EPOCH #{}\tHistory Best Score: {:.3f}\tBest Score: {:.3f}\tMean Score: {:.3f}\t Avg time for 1 epoch: {:.3f} seconds'.format(n_gen, genomes[0].score, bs, s, epoch_duration))
+    print('EPOCH #{}\tHistory Best Score: {:.4f}\tBest Score: {:.4f}\tMean Score: {:.4f}\t Avg time for 1 epoch: {:.3f} seconds'.format(n_gen, genomes[0].score, bs, s, epoch_duration))
     
     # 모델 업데이트
     best_genomes = deepcopy(genomes[:N_BEST])
@@ -213,7 +213,7 @@ plt.ylim(bottom=0)
 plt.xlabel('Epochs')
 plt.ylabel('Score')
 plt.tight_layout()
-plt.text(0,0.1,'start score: {:.3f}+///end score: {:.3f}'.format(high_score_history[:,1][0],high_score_history[:,1][-1]))
+plt.text(0,0.1,'start score: {:.4f}+///end score: {:.4f}'.format(high_score_history[:,1][0],high_score_history[:,1][-1]))
 plt.savefig(result_save_dir+'/ga_train.png')
 # plt.show()
 

@@ -15,7 +15,7 @@ X_GNT = np.mean(CSI_data_ref, axis=0)
 
 # load all
 CSI_datas = []
-for i in range(1,11,3):
+for i in range(1,9,2):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
@@ -25,6 +25,7 @@ for i in range(1,11,3):
 CSI_datas = np.concatenate(CSI_datas, axis=0)
 
 class network():
+
 
     def __init__(self, input_len, output_len, hidden_layer1, hidden_layer2, hidden_layer3, init_weight):
         # initialize weight
@@ -95,15 +96,16 @@ def score(X, output, C_GNT, score_type):
     distances_C = np.zeros((output.shape[0]))
     for i in range(output.shape[0]):
         distances_C[i] = hamming_distance(np.ravel(C_GNT), output[i])
+
     # vaying score function
+    # ratio_factor = np.zeros(distance_X.shape)
+    # ratio_factor[distance_X <= 1] = 0
+    # ratio_factor[distance_X > 1] = 0.04
     ratio_factor = np.zeros(distance_X.shape)
     ratio_factor[distance_X <= 1] = 0
-    if score_type > 10:
-        ratio_factor[distance_X > 1] = score_type / distance_X[distance_X > 1]
-        score_val = np.mean(np.abs(distance_X - distances_C / output.shape[1] * ratio_factor))
-    else:
-        ratio_factor[distance_X > 1] = score_type * 10
-        score_val = np.mean(np.abs(distance_X * ratio_factor - distances_C / output.shape[1]))
+    ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 40
+    score_val = np.mean(np.abs(distance_X * ratio_factor - distances_C))
+    # score_val = np.mean(np.abs(ratio_factor - distances_C/output.shape[0]))
     return distance_X, distances_C, score_val
 
 
@@ -112,6 +114,7 @@ def genome_score(genome, score_type):
     codewords = genome.predict(CSI_datas)
     genome.dist_X, genome.dist_C, genome.score = score(CSI_datas, codewords, codeword_ref, score_type)
     return genome
+
 
 """ 1013
  # varying ratio factor
