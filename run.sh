@@ -1,21 +1,15 @@
 #!/usr/bin/env bash
-# change dataset from (1,3,5) to 1-11
-#python dnn-ga.py --result_save_dir=1014/2-1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.05
-#python dnn-ga.py --result_save_dir=1014/2-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.1
-#python dnn-ga.py --result_save_dir=1014/2-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.05
-#python dnn-ga.py --result_save_dir=1014/2-4 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.1
-#python dnn-ga.py --result_save_dir=1014/2-5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.05
-#python dnn-ga.py --result_save_dir=1014/2-6 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.1
-#python dnn-ga.py --result_save_dir=1014/2-7 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.05
-#python dnn-ga.py --result_save_dir=1014/2-8 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.1
-
-# compare extreme cases
-# python dnn-ga.py --result_save_dir=1014/3-1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=0 --PROB_MUTATION=0.1
-# python dnn-ga.py --result_save_dir=1014/3-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=24 --PROB_MUTATION=0.1
-
 # normalize C,,,,,,,,,,,,,,,,,
-python dnn-ga.py --result_save_dir=1014_2/1 --EPOCHS=100 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=1
-python dnn-ga.py --result_save_dir=1014_2/2 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=2
+# python dnn-ga.py --result_save_dir=1014_2/1 --EPOCHS=100 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=1
+# python dnn-ga.py --result_save_dir=1014_2/2 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=2
+# python dnn-ga.py --result_save_dir=1014_2/3 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=3
+# python dnn-ga.py --result_save_dir=1014_2/4 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=4
+# change score function
+python dnn-ga.py --result_save_dir=1014_2/5 --EPOCHS=100 --N_POPULATION=1000 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=32
+python dnn-ga.py --result_save_dir=1014_2/6 --EPOCHS=100 --N_POPULATION=1000 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=35
+python dnn-ga.py --result_save_dir=1014_2/7 --EPOCHS=100 --N_POPULATION=1000 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=38
+python dnn-ga.py --result_save_dir=1014_2/8 --EPOCHS=100 --N_POPULATION=1000 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=42
+
 
 # =============================================================================================================================
 # Previous simulations
@@ -85,3 +79,18 @@ python dnn-ga.py --result_save_dir=1014_2/2 --EPOCHS=100 --N_POPULATION=100 --N_
 #python dnn-ga.py --result_save_dir=1014/1-8 --EPOCHS=1000 --N_POPULATION=150 --N_BEST=10 --N_CHILDREN=20 --h1=32 --h2=32 --h3=32 --early_stopping=100 --score_type=4 --random_seed=3
 #python dnn-ga.py --result_save_dir=1014/1-9 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=20 --h1=32 --h2=32 --h3=32 --early_stopping=100 --score_type=4 --random_seed=0 --mutation_std=2
 #python dnn-ga.py --result_save_dir=1014/1-10 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=20 --h1=32 --h2=32 --h3=32 --early_stopping=100 --score_type=4 --random_seed=0 --PROB_MUTATION=0.1
+
+# change dataset from (1,3,5) to 1-11
+#python dnn-ga.py --result_save_dir=1014/2-1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.05
+#python dnn-ga.py --result_save_dir=1014/2-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.1
+#python dnn-ga.py --result_save_dir=1014/2-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.05
+#python dnn-ga.py --result_save_dir=1014/2-4 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.1
+#python dnn-ga.py --result_save_dir=1014/2-5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.05
+#python dnn-ga.py --result_save_dir=1014/2-6 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.1
+#python dnn-ga.py --result_save_dir=1014/2-7 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.05
+#python dnn-ga.py --result_save_dir=1014/2-8 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=4 --PROB_MUTATION=0.1
+
+# compare extreme cases
+# python dnn-ga.py --result_save_dir=1014/3-1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=0 --PROB_MUTATION=0.1
+# python dnn-ga.py --result_save_dir=1014/3-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=24 --PROB_MUTATION=0.1
+

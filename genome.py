@@ -15,7 +15,7 @@ X_GNT = np.mean(CSI_data_ref, axis=0)
 
 # load all
 CSI_datas = []
-for i in range(1,11,1):
+for i in range(1,11,3):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
@@ -96,17 +96,14 @@ def score(X, output, C_GNT, score_type):
     for i in range(output.shape[0]):
         distances_C[i] = hamming_distance(np.ravel(C_GNT), output[i])
     # vaying score function
-    if score_type == 1:
-        ratio_factor = np.zeros(distance_X.shape)
-        ratio_factor[distance_X <= 1] = 0
-        ratio_factor[distance_X > 1] = 0.5 / distance_X[distance_X > 1]
-    elif score_type == 2:
-        ratio_factor = np.zeros(distance_X.shape)
-        ratio_factor[distance_X <= 1] = 0
-        ratio_factor[distance_X > 1] = np.exp(distance_X[distance_X > 1])
+    ratio_factor = np.zeros(distance_X.shape)
+    ratio_factor[distance_X <= 1] = 0
+    if score_type > 10:
+        ratio_factor[distance_X > 1] = score_type / distance_X[distance_X > 1]
+        score_val = np.mean(np.abs(distance_X - distances_C / output.shape[1] * ratio_factor))
     else:
-        raise NotImplementedError('Not implemented type of score function')
-    score_val = np.mean(np.abs(distance_X * ratio_factor - distances_C / output.shape[1]))
+        ratio_factor[distance_X > 1] = score_type * 10
+        score_val = np.mean(np.abs(distance_X * ratio_factor - distances_C / output.shape[1]))
     return distance_X, distances_C, score_val
 
 
@@ -158,4 +155,19 @@ def genome_score(genome, score_type):
         ratio_factor[distance_X > 1] = np.random.randn((distance_X > 1).sum()) * np.sqrt(0.1) + 60
     else:
         raise NotImplementedError('Not implemented type of score function')
+"""
+
+"""
+    if score_type == 1:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = 0.5 / distance_X[distance_X > 1]
+    elif score_type == 2:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] = np.exp(distance_X[distance_X > 1])
+    elif score_type == 3:
+        ratio_factor = np.zeros(distance_X.shape)
+        ratio_factor[distance_X <= 1] = 0
+        ratio_factor[distance_X > 1] =  0.3 / distance_X[distance_X>1]
 """
