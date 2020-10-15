@@ -4,10 +4,16 @@ from genome import *
 import matplotlib.pyplot as plt
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--result_save_dir", default='1014_4/baseline', type=str)
-args = parser.parse_args()
-result_save_dir = 'results/' + args.result_save_dir
+# load all dataset
+CSI_datas = []
+num_samples = 40
+for i in range(1, num_samples + 1):
+    CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
+    # Transpose
+    CSI_data = CSI_data.values.T
+    # Min-max normalization
+    CSI_data = minmax_norm(CSI_data)
+    CSI_datas.append(CSI_data)
 
 def minmax_norm(CSI_data1):
     max_v1 = np.max(CSI_data1)
@@ -16,25 +22,20 @@ def minmax_norm(CSI_data1):
     return (CSI_data1)
 
 if __name__ == '__main__':
-    # load dataset
-    CSI_data_ref = pd.read_csv('data_in_use/gain_1.csv', header=None)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--result_save_dir", default='1015_11/9', type=str)
+    parser.add_argument("--reference", default='gain_20', type=str)
+    args = parser.parse_args()
+    result_save_dir = 'results/' + args.result_save_dir
+
+    # load reference dataset
+    CSI_data_ref = pd.read_csv('data_in_use/' + args.reference + '.csv', header=None)
     CSI_data_ref = CSI_data_ref.values.T
     CSI_data_ref = minmax_norm(CSI_data_ref)
 
     import pickle
     with open(result_save_dir + '/best_genomes.pkl','rb') as f:
         best_genomes = pickle.load(f)
-
-    # load all
-    CSI_datas = []
-    num_samples = 40
-    for i in range(1, num_samples + 1):
-        CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
-        # Transpose
-        CSI_data = CSI_data.values.T
-        # Min-max normalization
-        CSI_data = minmax_norm(CSI_data)
-        CSI_datas.append(CSI_data)
 
     #%% check hamming distance
     # predict
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     # plt.xlabel('Sample location #')
     plt.xlabel('d / lambda')
     plt.tight_layout()
-    plt.savefig(result_save_dir + '/hamming_dist.png')
+    # plt.savefig(result_save_dir + '/hamming_dist.png')
     # plt.show()
 
     plt.figure(figsize=(10,5))
@@ -73,7 +74,7 @@ if __name__ == '__main__':
     # plt.xlabel('Sample location #')
     plt.xlabel('d / lambda')
     plt.tight_layout()
-    plt.savefig(result_save_dir + '/hamming_dist_same_loc.png')
+    # plt.savefig(result_save_dir + '/hamming_dist_same_loc.png')
     # plt.show()
 
     #%% scatter plot
@@ -81,13 +82,13 @@ if __name__ == '__main__':
     from genome import score
     CSI_data_all = np.concatenate(CSI_datas, axis=0)
     codeword_ref = best_genomes[0].predict(np.mean(CSI_data_ref, axis=0))
-    dist_X, dist_C, _ = score(CSI_data_all, codewords, codeword_ref, 1)
+    dist_X, dist_C, _ = score(CSI_data_all, np.mean(CSI_data_ref, axis=0), codewords, codeword_ref, 1)
 
     plt.figure()
     plt.scatter(dist_X, dist_C)
     plt.xlabel('Euclidean distance')
     plt.ylabel('Hamming distance')
-    plt.savefig(result_save_dir + '/hamming_dist_scatter.png')
+    # plt.savefig(result_save_dir + '/hamming_dist_scatter.png')
     #plt.show()
 
     # save codewords
