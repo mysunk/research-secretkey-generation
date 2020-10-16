@@ -37,7 +37,7 @@ if __name__ == '__main__':
     CSI_data_ref = minmax_norm(CSI_data_ref)
 
     import pickle
-    with open(result_save_dir + '/best_genomes_150.pkl','rb') as f:
+    with open(result_save_dir + '/best_genomes.pkl','rb') as f:
         best_genomes = pickle.load(f)
 
     #%% check hamming distance
@@ -67,8 +67,7 @@ if __name__ == '__main__':
     plt.xticks(range(1, num_samples+1)[::4], locs[::4])
     plt.ylabel('Hamming distance')
     plt.xlabel('d / lambda')
-    # plt.title(f'With reference {args.reference}')
-    plt.title(f'Epoch: 150')
+    plt.title(f'With reference {args.reference}')
     plt.tight_layout()
     plt.savefig(result_save_dir + f'/hamming_dist_{args.reference}.png')
     # plt.show()
@@ -93,8 +92,7 @@ if __name__ == '__main__':
     plt.scatter(dist_X, dist_C)
     plt.xlabel('Euclidean distance')
     plt.ylabel('Hamming distance')
-    # plt.title(f'With epoch {args.reference}')
-    plt.title(f'Epoch: 150')
+    plt.title(f'With epoch {args.reference}')
     plt.savefig(result_save_dir + f'/hamming_dist_scatter_{args.reference}.png')
     # plt.show()
 
