@@ -2,14 +2,14 @@ from scipy.special import expit
 from AE.load_dataset import *
 
 # load GNT
-CSI_data_ref = pd.read_csv('data_in_use/gain_1.csv', header=None)
-CSI_data_ref = CSI_data_ref.values.T
-CSI_data_ref = minmax_norm(CSI_data_ref)
-X_GNT = np.mean(CSI_data_ref, axis=0)
+X_GNT = pd.read_csv('data_in_use/gain_1.csv', header=None)
+X_GNT = X_GNT.values.T
+X_GNT = minmax_norm(X_GNT)
+X_GNT = np.mean(X_GNT, axis=0)
 
 # load all
 CSI_datas = []
-for i in range(1,11,1):
+for i in range(1,9,2):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
@@ -84,23 +84,20 @@ def hamming_distance(x, y):
             result += 1
     return result
 
-def score(CSI_data, CSI_data_ref, output, codeword_ref, score_type):
-    # calculate distance of X and C
-    X_dist = np.linalg.norm(CSI_data_ref - CSI_data, axis=1)
-    C_dist = np.zeros((output.shape[0]))
-    for i in range(output.shape[0]):
-        C_dist[i] = hamming_distance(np.ravel(codeword_ref), output[i])
+def score(X, X_GNT, C, C_GNT, score_type):
+    # vars
+    cw_length = C.shape[1]
+    X_length = X.shape[1]
 
-    cw_length = output.shape[1]
-    X_length = CSI_data.shape[1]
+    # calculate distance of X
+    X_dist = np.linalg.norm(X_GNT - X, axis=1)
 
-    # varying ratio factor
-    """ previous..
-    ratio_factor = np.zeros(distance_X.shape)
-    ratio_factor[distance_X <= 1] = 0
-    # ratio_factor[distance_X > 1] = 0.01 * score_type
-    ratio_factor[distance_X > 1] = 2.5 * score_type
-    """
+    # calculate distance of C
+    C_dist = np.zeros((C.shape[0]))
+    for i in range(C.shape[0]):
+        C_dist[i] = hamming_distance(np.ravel(C_GNT), C[i])
+
+    # score function
     CONST = 1
     if score_type == 1:
         ratio_factor = CONST * cw_length / X_dist
