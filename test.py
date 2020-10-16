@@ -26,7 +26,7 @@ def minmax_norm(CSI_data1):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--result_save_dir", default='1', type=str)
+    parser.add_argument("--result_save_dir", default='tmp', type=str)
     parser.add_argument("--reference", default='1', type=str)
     args = parser.parse_args()
     result_save_dir = 'results/' + args.result_save_dir

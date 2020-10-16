@@ -8,10 +8,10 @@ Created on Fri Jun  5 22:54:56 2020
 import multiprocessing
 import warnings
 from copy import deepcopy
-from genome import Genome, genome_score, hamming_distance
+from genome import Genome, genome_score
 import time
 import argparse
-from AE.load_dataset import *
+import numpy as np
 
 warnings.filterwarnings(action='ignore')
 
