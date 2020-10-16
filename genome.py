@@ -1,5 +1,12 @@
 from scipy.special import expit
-from AE.load_dataset import *
+import numpy as np
+import pandas as pd
+
+def minmax_norm(CSI_data1):
+    max_v1 = np.max(CSI_data1)
+    min_v1 = np.min(CSI_data1)
+    CSI_data1 = (CSI_data1 - min_v1) / (max_v1 - min_v1)
+    return (CSI_data1)
 
 # load GNT
 X_GNT = pd.read_csv('data_in_use/gain_1.csv', header=None)
@@ -7,7 +14,7 @@ X_GNT = X_GNT.values.T
 X_GNT = minmax_norm(X_GNT)
 X_GNT = np.mean(X_GNT, axis=0)
 
-# load all
+# load all data
 CSI_datas = []
 for i in range(1,9,2):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
