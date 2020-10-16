@@ -1,23 +1,27 @@
 #!/usr/bin/env bash
-# normalize C,,,,,,,,,,,,,,,,,
-# python dnn-ga.py --result_save_dir=1014_2/1 --EPOCHS=100 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=1
-# python dnn-ga.py --result_save_dir=1014_2/2 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=2
-# python dnn-ga.py --result_save_dir=1014_2/3 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=3
-# python dnn-ga.py --result_save_dir=1014_2/4 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=4
-# change score function
-#python dnn-ga.py --result_save_dir=1014_2/5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=32
-#python dnn-ga.py --result_save_dir=1014_2/6 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=35
-#python dnn-ga.py --result_save_dir=1014_2/7 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=38
-#python dnn-ga.py --result_save_dir=1014_2/8 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=42
-# python dnn-ga.py --result_save_dir=1014_2/9 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=29
-# python dnn-ga.py --result_save_dir=1014_2/10 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=26
-# python dnn-ga.py --result_save_dir=1014_2/11 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=23
-# python dnn-ga.py --result_save_dir=1014_2/12 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=20
-# python dnn-ga.py --result_save_dir=1014_4/1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=20
-#  python dnn-ga.py --result_save_dir=1014_4/3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=20
 
-# baseline
-python dnn-ga.py --result_save_dir=1014_4/baseline --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=11
+
+# normalize X dist
+python dnn-ga.py --result_save_dir=1016/1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=1
+python dnn-ga.py --result_save_dir=1016/2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=2
+python dnn-ga.py --result_save_dir=1016/3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=3
+python dnn-ga.py --result_save_dir=1016/4 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=4
+python dnn-ga.py --result_save_dir=1016/5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=5
+python dnn-ga.py --result_save_dir=1016/6 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=6
+python dnn-ga.py --result_save_dir=1016/7 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=7
+python dnn-ga.py --result_save_dir=1016/8 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=8
+python dnn-ga.py --result_save_dir=1016/9 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=9
+python dnn-ga.py --result_save_dir=1016/10 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=10
+python dnn-ga.py --result_save_dir=1016/11 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=11
+python dnn-ga.py --result_save_dir=1016/12 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=12
+python dnn-ga.py --result_save_dir=1016/13 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=13
+python dnn-ga.py --result_save_dir=1016/14 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=14
+python dnn-ga.py --result_save_dir=1016/15 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=15
+python dnn-ga.py --result_save_dir=1016/16 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=16
+python dnn-ga.py --result_save_dir=1016/17 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=17
+python dnn-ga.py --result_save_dir=1016/18 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=18
+python dnn-ga.py --result_save_dir=1016/19 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=19
+python dnn-ga.py --result_save_dir=1016/20 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=20
 
 
 # =============================================================================================================================
@@ -103,3 +107,41 @@ python dnn-ga.py --result_save_dir=1014_4/baseline --EPOCHS=1000 --N_POPULATION=
 # python dnn-ga.py --result_save_dir=1014/3-1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=0 --PROB_MUTATION=0.1
 # python dnn-ga.py --result_save_dir=1014/3-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=100 --score_type=24 --PROB_MUTATION=0.1
 
+# normalize C,,,,,,,,,,,,,,,,,
+# python dnn-ga.py --result_save_dir=1014_2/1 --EPOCHS=100 --N_POPULATION=100 --N_BEST=20 --N_CHILDREN=20 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=1
+# python dnn-ga.py --result_save_dir=1014_2/2 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=2
+# python dnn-ga.py --result_save_dir=1014_2/3 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=3
+# python dnn-ga.py --result_save_dir=1014_2/4 --EPOCHS=100 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=30 --PROB_MUTATION=0.1 --score_type=4
+# change score function
+#python dnn-ga.py --result_save_dir=1014_2/5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=32
+#python dnn-ga.py --result_save_dir=1014_2/6 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=35
+#python dnn-ga.py --result_save_dir=1014_2/7 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=38
+#python dnn-ga.py --result_save_dir=1014_2/8 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=42
+# python dnn-ga.py --result_save_dir=1014_2/9 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=29
+# python dnn-ga.py --result_save_dir=1014_2/10 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=26
+# python dnn-ga.py --result_save_dir=1014_2/11 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=23
+# python dnn-ga.py --result_save_dir=1014_2/12 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=20
+# python dnn-ga.py --result_save_dir=1014_4/1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=20
+#  python dnn-ga.py --result_save_dir=1014_4/3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --N_CHILDREN=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --PROB_MUTATION=0.1 --score_type=20
+
+# baseline
+#python dnn-ga.py --result_save_dir=1015/1 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=1
+#python dnn-ga.py --result_save_dir=1015/2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=2
+#python dnn-ga.py --result_save_dir=1015/3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=3
+#python dnn-ga.py --result_save_dir=1015/4 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=4
+#python dnn-ga.py --result_save_dir=1015/5 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=5
+#python dnn-ga.py --result_save_dir=1015/6 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=6
+#python dnn-ga.py --result_save_dir=1015/7 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=7
+#python dnn-ga.py --result_save_dir=1015/8 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=8
+#python dnn-ga.py --result_save_dir=1015/9 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=9
+#python dnn-ga.py --result_save_dir=1015/10 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=10
+#python dnn-ga.py --result_save_dir=1015/11 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=11
+#python dnn-ga.py --result_save_dir=1015/12 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=12
+#python dnn-ga.py --result_save_dir=1015/13 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=13
+#python dnn-ga.py --result_save_dir=1015/14 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=14
+#python dnn-ga.py --result_save_dir=1015/15 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=15
+#python dnn-ga.py --result_save_dir=1015/16 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=16
+#python dnn-ga.py --result_save_dir=1015/17 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=17
+#python dnn-ga.py --result_save_dir=1015/18 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=18
+#python dnn-ga.py --result_save_dir=1015/19 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=19
+#python dnn-ga.py --result_save_dir=1015/20 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=20
