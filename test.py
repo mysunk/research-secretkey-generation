@@ -92,7 +92,7 @@ if __name__ == '__main__':
     plt.scatter(dist_X, dist_C)
     plt.xlabel('Euclidean distance')
     plt.ylabel('Hamming distance')
-    plt.title(f'With epoch {args.reference}')
+    plt.title(f'With reference {args.reference}')
     plt.savefig(result_save_dir + f'/hamming_dist_scatter_{args.reference}.png')
     # plt.show()
 

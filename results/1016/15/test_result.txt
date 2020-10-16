@@ -1,2 +1,0 @@
-start score: 0.4333
-end score: 0.3701

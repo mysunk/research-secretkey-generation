@@ -86,17 +86,30 @@ def hamming_distance(x, y):
 
 def score(CSI_data, CSI_data_ref, output, codeword_ref, score_type):
     # calculate distance of X and C
-    distance_X = np.linalg.norm(CSI_data_ref - CSI_data, axis=1)
-    distances_C = np.zeros((output.shape[0]))
+    X_dist = np.linalg.norm(CSI_data_ref - CSI_data, axis=1)
+    C_dist = np.zeros((output.shape[0]))
     for i in range(output.shape[0]):
-        distances_C[i] = hamming_distance(np.ravel(codeword_ref), output[i])
+        C_dist[i] = hamming_distance(np.ravel(codeword_ref), output[i])
+
+    cw_length = output.shape[1]
+    X_length = CSI_data.shape[1]
 
     # varying ratio factor
+    """ previous..
     ratio_factor = np.zeros(distance_X.shape)
     ratio_factor[distance_X <= 1] = 0
     # ratio_factor[distance_X > 1] = 0.01 * score_type
     ratio_factor[distance_X > 1] = 2.5 * score_type
-    return distance_X, distances_C, np.sqrt(np.mean((distance_X / CSI_data.shape[1] * ratio_factor - distances_C / output.shape[1]) ** 2))
+    """
+    CONST = 1
+    if score_type == 1:
+        ratio_factor = CONST * cw_length / X_dist
+        return X_dist, C_dist, np.sqrt(np.mean((X_dist / X_length * ratio_factor - C_dist / cw_length) ** 2))
+    elif score_type == 2:
+        ratio_factor = CONST * cw_length / (X_dist ** 2)
+        return X_dist, C_dist, np.sqrt(np.mean((X_dist / X_length * ratio_factor - C_dist / cw_length) ** 2))
+    elif score_type == 3:
+        return X_dist, C_dist, np.sqrt(np.mean((X_dist**2 / X_length - C_dist / cw_length) ** 2))
 
 
 def genome_score(genome, score_type):
