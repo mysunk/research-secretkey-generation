@@ -15,15 +15,15 @@ X_GNT = minmax_norm(X_GNT)
 X_GNT = np.mean(X_GNT, axis=0)
 
 # load all data
-CSI_datas = []
+X = []
 for i in range(1,9,2):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
     # Min-max normalization
     CSI_data = minmax_norm(CSI_data)
-    CSI_datas.append(CSI_data)
-CSI_datas = np.concatenate(CSI_datas, axis=0)
+    X.append(CSI_data)
+X = np.concatenate(X, axis=0)
 
 class network():
 
@@ -91,7 +91,7 @@ def hamming_distance(x, y):
             result += 1
     return result
 
-def score(X, X_GNT, C, C_GNT, score_type):
+def score(X, X_GNT, C, C_GNT, score_type, CONST, POWER_RATIO):
     # vars
     cw_length = C.shape[1]
     X_length = X.shape[1]
@@ -105,19 +105,19 @@ def score(X, X_GNT, C, C_GNT, score_type):
         C_dist[i] = hamming_distance(np.ravel(C_GNT), C[i])
 
     # score function
-    CONST = 1
     if score_type == 1:
-        ratio_factor = CONST * cw_length / X_dist
+        ratio_factor = CONST * cw_length / (X_dist)
         return X_dist, C_dist, np.sqrt(np.mean((X_dist / X_length * ratio_factor - C_dist / cw_length) ** 2))
     elif score_type == 2:
         ratio_factor = CONST * cw_length / (X_dist ** 2)
         return X_dist, C_dist, np.sqrt(np.mean((X_dist / X_length * ratio_factor - C_dist / cw_length) ** 2))
     elif score_type == 3:
-        return X_dist, C_dist, np.sqrt(np.mean((X_dist**2 / X_length - C_dist / cw_length) ** 2))
+        # return X_dist, C_dist, np.sqrt(np.mean(((X_dist / X_length)**POWER_RATIO*CONST - C_dist / cw_length) ** 2))
+        return X_dist, C_dist, np.sqrt(np.mean(((X_dist * CONST) ** POWER_RATIO - C_dist / cw_length) ** 2))
 
 
-def genome_score(genome, score_type):
-    codeword_ref = genome.predict(X_GNT)
-    codewords = genome.predict(CSI_datas)
-    genome.X_dist, genome.C_dist, genome.score = score(CSI_datas,X_GNT, codewords, codeword_ref, score_type)
+def genome_score(genome, score_type, CONST=1, POWER_RATIO=1):
+    C_GNT = genome.predict(X_GNT)
+    C = genome.predict(X)
+    genome.X_dist, genome.C_dist, genome.score = score(X, X_GNT, C, C_GNT, score_type,CONST, POWER_RATIO)
     return genome

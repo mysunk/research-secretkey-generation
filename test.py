@@ -28,6 +28,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--result_save_dir", default='tmp', type=str)
     parser.add_argument("--reference", default='1', type=str)
+    parser.add_argument("--POWER_RATIO", default=1, type=float)
+    parser.add_argument("--CONST", default=1, type=float)
     args = parser.parse_args()
     result_save_dir = 'results/' + args.result_save_dir
 
@@ -86,7 +88,7 @@ if __name__ == '__main__':
     from genome import score
     CSI_data_all = np.concatenate(CSI_datas, axis=0)
     codeword_ref = best_genomes[0].predict(np.mean(CSI_data_ref, axis=0))
-    dist_X, dist_C, _ = score(CSI_data_all, np.mean(CSI_data_ref, axis=0), codewords, codeword_ref, 1)
+    dist_X, dist_C, _ = score(CSI_data_all, np.mean(CSI_data_ref, axis=0), codewords, codeword_ref, 1, CONST=args.CONST, POWER_RATIO = args.POWER_RATIO)
 
     plt.figure()
     plt.scatter(dist_X, dist_C)
