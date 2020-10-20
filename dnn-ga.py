@@ -33,7 +33,10 @@ parser.add_argument("--h3", default=484, type=int)
 parser.add_argument("--result_save_dir", default='tmp', type=str)
 parser.add_argument("--crossover_fraction", default=0.5, type=float)
 parser.add_argument("--random_seed", default=76, type=int)
-parser.add_argument("--score_type", default=1, type=int)
+parser.add_argument("--score_type", default=3, type=int)
+parser.add_argument("--POWER_RATIO", default=2, type=float)
+parser.add_argument("--CONST", default=0.1, type=float)
+
 args = parser.parse_args()
 
 # %% Hyperparameters
@@ -120,7 +123,7 @@ while n_gen <= EPOCHS:
         if __name__ == '__main__':
             from _functools import partial
 
-            partial_func = partial(genome_score, score_type=args.score_type)
+            partial_func = partial(genome_score, score_type=args.score_type, CONST=args.CONST, POWER_RATIO=args.POWER_RATIO)
             # hyper parameters
             pool = multiprocessing.Pool(processes=CPU_CORE)
             genomes[idx] = pool.map(partial_func, _genomes)
@@ -229,8 +232,8 @@ plt.tight_layout()
 plt.savefig(result_save_dir+'/ga_train.png')
 # plt.show()
 f = open(result_save_dir + '/test_result.txt','w+')
-f.write('start score: {:.4f}\n'.format(high_score_history[:,1][0]))
-f.write('end score: {:.4f}'.format(high_score_history[:,1][-1]))
+f.write('start score: {:.5f}\n'.format(high_score_history[:,1][0]))
+f.write('end score: {:.5f}'.format(high_score_history[:,1][-1]))
 f.close()
 
 
