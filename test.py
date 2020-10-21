@@ -9,7 +9,7 @@ matplotlib.rc('font', **font)
 
 # load all dataset
 CSI_datas = []
-num_samples = 41
+num_samples = 27
 for i in range(1, num_samples + 1):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
@@ -26,10 +26,12 @@ def minmax_norm(CSI_data1):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--result_save_dir", default='tmp', type=str)
+    parser.add_argument("--result_save_dir", default='1019_3/1', type=str)
     parser.add_argument("--reference", default='1', type=str)
-    parser.add_argument("--POWER_RATIO", default=1, type=float)
-    parser.add_argument("--CONST", default=1, type=float)
+    parser.add_argument("--score_type", default='4', type=int)
+    parser.add_argument("--CONST", default='10', type=float)
+    parser.add_argument("--POWER_RATIO", default='1', type=float)
+
     args = parser.parse_args()
     result_save_dir = 'results/' + args.result_save_dir
 
@@ -46,7 +48,7 @@ if __name__ == '__main__':
     # predict
     codewords_ref = best_genomes[0].predict(CSI_data_ref)
     # plot
-    dists = np.zeros((1000, len(CSI_datas)), dtype=int)
+    hamm_dists = np.zeros((1000, len(CSI_datas)), dtype=int)
     dists_same_loc = np.zeros((1000, len(CSI_datas)), dtype=int)
     # random sampling
     max_i = CSI_data_ref.shape[0]
@@ -56,23 +58,13 @@ if __name__ == '__main__':
         codewords.append(codewords_2)
         for i in range(1000):
             # for same sample
-            dists[i, j] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
+            hamm_dists[i, j] = hamming_distance(codewords_ref[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
             dists_same_loc[i,j] = hamming_distance(codewords_2[np.random.randint(0, max_i, 1)[0],:], codewords_2[np.random.randint(0, max_i, 1)[0],:])
     codewords = np.concatenate(codewords, axis=0)
 
     ref_num = int(args.reference ) - 1
     locs = np.arange(-0.06*(ref_num), 0.06*(num_samples - ref_num), 0.06)
     locs = [float('{:.2f}'.format(l)) for l in locs]
-
-    plt.figure(figsize=(10,5))
-    plt.boxplot(x=dists)
-    plt.xticks(range(1, num_samples+1)[::4], locs[::4])
-    plt.ylabel('Hamming distance')
-    plt.xlabel('d / lambda')
-    plt.title(f'With reference {args.reference}')
-    plt.tight_layout()
-    plt.savefig(result_save_dir + f'/hamming_dist_{args.reference}.png')
-    # plt.show()
 
     plt.figure(figsize=(10,5))
     plt.boxplot(x=dists_same_loc)
@@ -88,15 +80,32 @@ if __name__ == '__main__':
     from genome import score
     CSI_data_all = np.concatenate(CSI_datas, axis=0)
     codeword_ref = best_genomes[0].predict(np.mean(CSI_data_ref, axis=0))
-    dist_X, dist_C, _ = score(CSI_data_all, np.mean(CSI_data_ref, axis=0), codewords, codeword_ref, 1, CONST=args.CONST, POWER_RATIO = args.POWER_RATIO)
+    dist_X, dist_C, _, score_GNT = score(CSI_data_all, np.mean(CSI_data_ref, axis=0), codewords, codeword_ref, args.score_type, args.CONST, args.POWER_RATIO)
 
     plt.figure()
-    plt.scatter(dist_X, dist_C)
+    plt.scatter(dist_X, dist_C, label='result',facecolors='none',edgecolors='k')
     plt.xlabel('Euclidean distance')
+    # plot ground truth for score function
+    plt.plot(dist_X, score_GNT,'rx', label='GNT')
     plt.ylabel('Hamming distance')
     plt.title(f'With reference {args.reference}')
+    plt.legend()
     plt.savefig(result_save_dir + f'/hamming_dist_scatter_{args.reference}.png')
     # plt.show()
+
+    score_GNT = np.array([np.mean(score_GNT[i*1000:(i+1)*1000], axis=0) for i in range(num_samples)])
+    plt.figure(figsize=(10,5))
+    plt.boxplot(x=hamm_dists)
+    plt.plot(range(1, num_samples+1),score_GNT,'rx-', label='GNT')
+    plt.xticks(range(1, num_samples+1)[::4], locs[::4])
+    plt.ylabel('Hamming distance')
+    plt.xlabel('d / lambda')
+    plt.title(f'With reference {args.reference}')
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig(result_save_dir + f'/hamming_dist_{args.reference}.png')
+    # plt.show()
+
 
     # save codewords
     codewords = pd.DataFrame(data = np.concatenate(codewords, axis=0))

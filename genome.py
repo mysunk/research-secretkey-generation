@@ -16,7 +16,7 @@ X_GNT = np.mean(X_GNT, axis=0)
 
 # load all data
 X = []
-for i in range(1,9,2):
+for i in range(1,7,1):
     CSI_data = pd.read_csv('data_in_use/gain_' + str(i) + '.csv', header=None)
     # Transpose
     CSI_data = CSI_data.values.T
@@ -106,18 +106,30 @@ def score(X, X_GNT, C, C_GNT, score_type, CONST, POWER_RATIO):
 
     # score function
     if score_type == 1:
-        ratio_factor = CONST * cw_length / (X_dist)
-        return X_dist, C_dist, np.sqrt(np.mean((X_dist / X_length * ratio_factor - C_dist / cw_length) ** 2))
-    elif score_type == 2:
-        ratio_factor = CONST * cw_length / (X_dist ** 2)
-        return X_dist, C_dist, np.sqrt(np.mean((X_dist / X_length * ratio_factor - C_dist / cw_length) ** 2))
+        ratio_factor = CONST * cw_length / (X_dist ** POWER_RATIO)
+        GNT = X_dist / X_length * ratio_factor * cw_length
+        return X_dist, C_dist, np.sqrt(np.mean((X_dist / X_length * ratio_factor - C_dist / cw_length) ** 2)), GNT
+    if score_type == 2:
+        GNT = (X_dist / X_length) ** POWER_RATIO * CONST * cw_length
+        return X_dist, C_dist, np.sqrt(np.mean(((X_dist / X_length) ** POWER_RATIO * CONST - C_dist / cw_length) ** 2)), GNT  ## 1017
     elif score_type == 3:
-        # return X_dist, C_dist, np.sqrt(np.mean(((X_dist / X_length)**POWER_RATIO*CONST - C_dist / cw_length) ** 2))
-        return X_dist, C_dist, np.sqrt(np.mean(((X_dist * CONST) ** POWER_RATIO - C_dist / cw_length) ** 2))
+        # return X_dist, C_dist, np.sqrt(np.mean(((X_dist / X_length)**POWER_RATIO*CONST - C_dist / cw_length) ** 2)) ## 1017
+        # return X_dist, C_dist, np.sqrt(np.mean(((X_dist * CONST) ** POWER_RATIO - C_dist / cw_length) ** 2)) ## 1018
+        GNT = X_dist ** POWER_RATIO * CONST
+        return X_dist, C_dist, np.sqrt(np.mean((X_dist ** POWER_RATIO * CONST - C_dist) ** 2)), GNT ## 1019
+    elif score_type == 4:
+        GNT = np.exp(X_dist / np.exp(1)) * CONST
+        return X_dist, C_dist, np.sqrt(np.mean((np.exp(X_dist / np.exp(1)) * CONST - C_dist) ** 2)), GNT  ## 1019
+    elif score_type == 5:
+        GNT = (X_dist * CONST) ** POWER_RATIO * cw_length
+        return X_dist, C_dist, np.sqrt(np.mean(((X_dist * CONST) ** POWER_RATIO - C_dist / cw_length) ** 2)), GNT ## 1018
+    elif score_type == 6:
+        GNT = (X_dist / X_length)**POWER_RATIO*CONST * cw_length
+        return X_dist, C_dist, np.sqrt(np.mean(((X_dist / X_length)**POWER_RATIO*CONST - C_dist / cw_length) ** 2)), GNT ## 1017
 
 
 def genome_score(genome, score_type, CONST=1, POWER_RATIO=1):
     C_GNT = genome.predict(X_GNT)
     C = genome.predict(X)
-    genome.X_dist, genome.C_dist, genome.score = score(X, X_GNT, C, C_GNT, score_type,CONST, POWER_RATIO)
+    genome.X_dist, genome.C_dist, genome.score, _ = score(X, X_GNT, C, C_GNT, score_type,CONST, POWER_RATIO)
     return genome
