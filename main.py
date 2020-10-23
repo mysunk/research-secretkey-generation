@@ -8,7 +8,8 @@ Created on Fri Jun  5 22:54:56 2020
 import multiprocessing
 import warnings
 from copy import deepcopy
-from genome import Genome, genome_score
+from genome import Genome
+from cal_score import genome_score
 import time
 import argparse
 import numpy as np
@@ -33,7 +34,6 @@ parser.add_argument("--h3", default=484, type=int)
 parser.add_argument("--result_save_dir", default='tmp', type=str)
 parser.add_argument("--crossover_fraction", default=0.5, type=float)
 parser.add_argument("--random_seed", default=76, type=int)
-parser.add_argument("--score_type", default=6, type=int)
 parser.add_argument("--POWER_RATIO", default=0.5, type=float)
 parser.add_argument("--CONST", default=1.0, type=float)
 
@@ -123,7 +123,7 @@ while n_gen <= EPOCHS:
         if __name__ == '__main__':
             from _functools import partial
 
-            partial_func = partial(genome_score, epoch=n_gen,score_type=args.score_type, CONST=args.CONST, POWER_RATIO=args.POWER_RATIO)
+            partial_func = partial(genome_score, CONST=args.CONST, POWER_RATIO=args.POWER_RATIO)
             # hyper parameters
             pool = multiprocessing.Pool(processes=CPU_CORE)
             genomes[idx] = pool.map(partial_func, _genomes)
@@ -210,7 +210,7 @@ while n_gen <= EPOCHS:
 
 print('==Process 2 Done==')
 
-#%% plot triain result
+#%% plot train result
 import matplotlib
 font = {'size':15}
 matplotlib.rc('font',**font)
@@ -237,7 +237,7 @@ f.write('end score: {:.5f}'.format(high_score_history[:,1][-1]))
 f.close()
 
 
-# save the best genome
+# save the best weight of the DNN model
 import pickle
 with open(result_save_dir+'/best_genomes.pkl','wb') as f:
     pickle.dump(best_genomes, f, pickle.HIGHEST_PROTOCOL)

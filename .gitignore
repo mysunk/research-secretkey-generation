@@ -1,8 +1,6 @@
 .idea
-etc
 __pycache__
-data
-dumbs
+etc
+data_raw
 AE
-models
-results
+analysis_dataset.py
