@@ -128,8 +128,10 @@ def score(X, X_GNT, C, C_GNT, score_type, CONST, POWER_RATIO):
         return X_dist, C_dist, np.sqrt(np.mean(((X_dist / X_length)**POWER_RATIO*CONST - C_dist / cw_length) ** 2)), GNT ## 1017
 
 
-def genome_score(genome, score_type, CONST=1, POWER_RATIO=1):
+def genome_score(genome, score_type, epoch, CONST=1, POWER_RATIO=1):
     C_GNT = genome.predict(X_GNT)
     C = genome.predict(X)
     genome.X_dist, genome.C_dist, genome.score, _ = score(X, X_GNT, C, C_GNT, score_type,CONST, POWER_RATIO)
+    data = pd.DataFrame(data = C)
+    data.to_csv(f'results/epoch_{epoch}_alpha_1.csv',index=False)
     return genome

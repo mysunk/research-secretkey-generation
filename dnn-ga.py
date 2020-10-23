@@ -123,7 +123,7 @@ while n_gen <= EPOCHS:
         if __name__ == '__main__':
             from _functools import partial
 
-            partial_func = partial(genome_score, score_type=args.score_type, CONST=args.CONST, POWER_RATIO=args.POWER_RATIO)
+            partial_func = partial(genome_score, epoch=n_gen,score_type=args.score_type, CONST=args.CONST, POWER_RATIO=args.POWER_RATIO)
             # hyper parameters
             pool = multiprocessing.Pool(processes=CPU_CORE)
             genomes[idx] = pool.map(partial_func, _genomes)

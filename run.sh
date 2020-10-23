@@ -21,7 +21,6 @@
 #python dnn-ga.py --result_save_dir=1021/20 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.8
 #python dnn-ga.py --result_save_dir=1021/21 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=64 --h2=64 --h3=64 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.9
 
-
 #
 #python dnn-ga.py --result_save_dir=1021/1-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=1
 #python dnn-ga.py --result_save_dir=1021/2-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=1.1
@@ -34,16 +33,16 @@
 #python dnn-ga.py --result_save_dir=1021/9-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=1.8
 #python dnn-ga.py --result_save_dir=1021/10-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=1.9
 #python dnn-ga.py --result_save_dir=1021/11-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.0
-python dnn-ga.py --result_save_dir=1021/12-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.1
-python dnn-ga.py --result_save_dir=1021/13-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.2
-python dnn-ga.py --result_save_dir=1021/14-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.3
-python dnn-ga.py --result_save_dir=1021/15-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.4
-python dnn-ga.py --result_save_dir=1021/16-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.5
-python dnn-ga.py --result_save_dir=1021/17-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.5
-python dnn-ga.py --result_save_dir=1021/18-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.6
-python dnn-ga.py --result_save_dir=1021/19-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.7
-python dnn-ga.py --result_save_dir=1021/20-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.8
-python dnn-ga.py --result_save_dir=1021/21-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.9
+#python dnn-ga.py --result_save_dir=1021/12-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.1
+#python dnn-ga.py --result_save_dir=1021/13-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.2
+#python dnn-ga.py --result_save_dir=1021/14-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.3
+#python dnn-ga.py --result_save_dir=1021/15-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.4
+#python dnn-ga.py --result_save_dir=1021/16-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.5
+#python dnn-ga.py --result_save_dir=1021/17-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.5
+#python dnn-ga.py --result_save_dir=1021/18-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.6
+#python dnn-ga.py --result_save_dir=1021/19-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.7
+#python dnn-ga.py --result_save_dir=1021/20-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.8
+#python dnn-ga.py --result_save_dir=1021/21-2 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=128 --h2=128 --h3=128 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.9
 
 
 #python dnn-ga.py --result_save_dir=1021/1-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=1
@@ -57,17 +56,17 @@ python dnn-ga.py --result_save_dir=1021/21-2 --EPOCHS=1000 --N_POPULATION=100 --
 #python dnn-ga.py --result_save_dir=1021/9-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=1.8
 #python dnn-ga.py --result_save_dir=1021/10-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=1.9
 #python dnn-ga.py --result_save_dir=1021/11-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.0
-python dnn-ga.py --result_save_dir=1021/12-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.1
-python dnn-ga.py --result_save_dir=1021/13-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.2
-python dnn-ga.py --result_save_dir=1021/14-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.3
-python dnn-ga.py --result_save_dir=1021/15-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.4
-python dnn-ga.py --result_save_dir=1021/16-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.5
-python dnn-ga.py --result_save_dir=1021/17-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.5
-python dnn-ga.py --result_save_dir=1021/18-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.6
-python dnn-ga.py --result_save_dir=1021/19-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.7
-python dnn-ga.py --result_save_dir=1021/20-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.8
-python dnn-ga.py --result_save_dir=1021/21-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.9
-
+#python dnn-ga.py --result_save_dir=1021/12-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.1
+#python dnn-ga.py --result_save_dir=1021/13-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.2
+#python dnn-ga.py --result_save_dir=1021/14-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.3
+#python dnn-ga.py --result_save_dir=1021/15-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.4
+#python dnn-ga.py --result_save_dir=1021/16-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=2.5
+#python dnn-ga.py --result_save_dir=1021/17-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.5
+#python dnn-ga.py --result_save_dir=1021/18-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.6
+#python dnn-ga.py --result_save_dir=1021/19-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.7
+#python dnn-ga.py --result_save_dir=1021/20-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.8
+#python dnn-ga.py --result_save_dir=1021/21-3 --EPOCHS=1000 --N_POPULATION=100 --N_BEST=10 --h1=256 --h2=256 --h3=256 --early_stopping=50 --score_type=6 --POWER_RATIO=0.5 --CONST=0.9
+#
 
 # =============================================================================================================================
 # Previous simulations
