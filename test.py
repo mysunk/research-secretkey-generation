@@ -4,7 +4,7 @@ from genome import *
 import matplotlib.pyplot as plt
 import argparse
 import matplotlib
-font = {'size': 15}
+font = {'size': 15, 'family': 'monospace'}
 matplotlib.rc('font', **font)
 
 # load all dataset
@@ -26,11 +26,11 @@ def minmax_norm(CSI_data1):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--result_save_dir", default='1019_3/1', type=str)
+    parser.add_argument("--result_save_dir", default='1021/1', type=str)
     parser.add_argument("--reference", default='1', type=str)
-    parser.add_argument("--score_type", default='4', type=int)
-    parser.add_argument("--CONST", default='10', type=float)
-    parser.add_argument("--POWER_RATIO", default='1', type=float)
+    parser.add_argument("--score_type", default='6', type=int)
+    parser.add_argument("--CONST", default='1', type=float)
+    parser.add_argument("--POWER_RATIO", default='0.5', type=float)
 
     args = parser.parse_args()
     result_save_dir = 'results/' + args.result_save_dir
@@ -67,9 +67,9 @@ if __name__ == '__main__':
     locs = [float('{:.2f}'.format(l)) for l in locs]
 
     plt.figure(figsize=(10,5))
-    plt.boxplot(x=dists_same_loc)
+    plt.boxplot(x=dists_same_loc / 242)
     plt.xticks(range(num_samples)[::4], locs[::4])
-    plt.ylabel('Hamming distance')
+    plt.ylabel('BER')
     plt.xlabel('d / lambda')
     plt.tight_layout()
     plt.savefig(result_save_dir + '/hamming_dist_same_loc.png')
@@ -83,11 +83,11 @@ if __name__ == '__main__':
     dist_X, dist_C, _, score_GNT = score(CSI_data_all, np.mean(CSI_data_ref, axis=0), codewords, codeword_ref, args.score_type, args.CONST, args.POWER_RATIO)
 
     plt.figure()
-    plt.scatter(dist_X, dist_C, label='result',facecolors='none',edgecolors='k')
+    plt.scatter(dist_X, dist_C/242*100, label='result',facecolors='none',edgecolors='k')
     plt.xlabel('Euclidean distance')
     # plot ground truth for score function
-    plt.plot(dist_X, score_GNT,'rx', label='GNT')
-    plt.ylabel('Hamming distance')
+    plt.plot(dist_X, score_GNT/242*100,'rx', label='GNT')
+    plt.ylabel('BER [%]')
     plt.title(f'With reference {args.reference}')
     plt.legend()
     plt.savefig(result_save_dir + f'/hamming_dist_scatter_{args.reference}.png')
