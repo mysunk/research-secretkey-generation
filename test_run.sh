@@ -1,40 +1,11 @@
 #!/usr/bin/env bash
-python test.py --result_save_dir=1018/1-1 --reference=1
-python test.py --result_save_dir=1018/1-2 --reference=1
-python test.py --result_save_dir=1018/1-3 --reference=1
-python test.py --result_save_dir=1018/1-4 --reference=1
-python test.py --result_save_dir=1018/1-5 --reference=1
-python test.py --result_save_dir=1018/1-6 --reference=1
-python test.py --result_save_dir=1018/1-7 --reference=1
-python test.py --result_save_dir=1018/1-8 --reference=1
-python test.py --result_save_dir=1018/1-9 --reference=1
-python test.py --result_save_dir=1018/1-10 --reference=1
-python test.py --result_save_dir=1018/1-11 --reference=1
-python test.py --result_save_dir=1018/1-12 --reference=1
-python test.py --result_save_dir=1018/1-13 --reference=1
-python test.py --result_save_dir=1018/1-14 --reference=1
-python test.py --result_save_dir=1018/1-15 --reference=1
-python test.py --result_save_dir=1018/1-16 --reference=1
-python test.py --result_save_dir=1018/1-17 --reference=1
-python test.py --result_save_dir=1018/1-18 --reference=1
-python test.py --result_save_dir=1018/1-19 --reference=1
-python test.py --result_save_dir=1018/1-20 --reference=1
 
-python test.py --result_save_dir=1018/2-1 --reference=1
-python test.py --result_save_dir=1018/2-2 --reference=1
-python test.py --result_save_dir=1018/2-3 --reference=1
-python test.py --result_save_dir=1018/2-4 --reference=1
-python test.py --result_save_dir=1018/2-5 --reference=1
-python test.py --result_save_dir=1018/2-6 --reference=1
-python test.py --result_save_dir=1018/2-7 --reference=1
-python test.py --result_save_dir=1018/2-8 --reference=1
-python test.py --result_save_dir=1018/2-9 --reference=1
-python test.py --result_save_dir=1018/2-10 --reference=1
-python test.py --result_save_dir=1018/2-11 --reference=1
-python test.py --result_save_dir=1018/2-12 --reference=1
-python test.py --result_save_dir=1018/2-13 --reference=1
-python test.py --result_save_dir=1018/2-14 --reference=1
-python test.py --result_save_dir=1018/2-15 --reference=1
-python test.py --result_save_dir=1018/2-16 --reference=1
-python test.py --result_save_dir=1018/2-17 --reference=1
-python test.py --result_save_dir=1018/2-18 --reference=1
+for i in $(seq 1 1 27)
+do
+  for j in $(seq 17 1 21)
+  do
+    arg1="--result_save_dir=1021/$j"
+    arg2="--reference=$i"
+    python test.py "$arg1" "$arg2" --score_type=6 --POWER_RATIO=0.5 --CONST=1
+  done
+done

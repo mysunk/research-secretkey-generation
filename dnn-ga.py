@@ -33,9 +33,9 @@ parser.add_argument("--h3", default=484, type=int)
 parser.add_argument("--result_save_dir", default='tmp', type=str)
 parser.add_argument("--crossover_fraction", default=0.5, type=float)
 parser.add_argument("--random_seed", default=76, type=int)
-parser.add_argument("--score_type", default=3, type=int)
-parser.add_argument("--POWER_RATIO", default=2, type=float)
-parser.add_argument("--CONST", default=0.1, type=float)
+parser.add_argument("--score_type", default=6, type=int)
+parser.add_argument("--POWER_RATIO", default=0.5, type=float)
+parser.add_argument("--CONST", default=1.0, type=float)
 
 args = parser.parse_args()
 
