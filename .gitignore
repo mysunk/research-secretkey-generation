@@ -3,4 +3,5 @@ __pycache__
 etc
 data_raw
 AE
+data
 analysis_dataset.py
