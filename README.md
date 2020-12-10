@@ -1,3 +1,5 @@
+Deep Learning based end-to-end Physical Layer Secret Key Generation using Wireless Channel State Information
+=======================================
 ### Will be updated:
 * citation link
 * summary
@@ -5,8 +7,6 @@
 * result  
 * __PLZ REBASE COMMIT LOG!!!__
 
-Deep Learning based end-to-end Physical Layer Secret Key Generation using Wireless Channel State Information
-=======================================
 This repository is the official implementation of Deep Learning based end-to-end Physical Layer Secret Key Generation using Wireless Channel State Information.  
 
 ![overview_keygen](https://user-images.githubusercontent.com/48520885/101493782-d920e500-39a9-11eb-8d62-2330d9dbbf87.png)
@@ -42,4 +42,7 @@ python evaluate.py --result_save_dir results --reference 1 --POWER_RATIO 0.5 --C
 ```
 
 Results
+==================
+
+Limitations and future work
 ==================
