@@ -54,7 +54,7 @@ Experiment and Datasets
 ![gain](img/gain.png)
 * Use gain of the channel state information
 
-Usuage
+Usage
 ==================
 ### Requirements 
 To install requirements:
