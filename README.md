@@ -5,11 +5,11 @@ This repository is the official implementation of Deep Learning based end-to-end
 You can find the paper here:
 [link](https://www.dbpia.co.kr/pdf/pdfView.do?nodeId=NODE10501198&mark=0&useDate=&bookmarkCnt=0&ipRange=N&accessgl=Y&language=ko_KR)
 
-### __Context__
+### __Table of Contents__
 * [Introduction](#introduction)
+* [Usage](#usage)
 * [Methodology](#methodology)
 * [Experiment and Datasets](#experiment-and-datasets)
-* [Usuage](#usuage)
 * [Results](#results)
 
 Introduction
@@ -24,6 +24,32 @@ Introduction
 * Quantization is the process of converting channel measurements into binary values, which results in loss of information
 * Additional communication between users is required to restore lost information
 * Requires end-to-end key generation for additional communication-free key generation
+
+Usage
+==================
+### Requirements 
+To install requirements:
+```setup
+pip install -r requirements.txt
+```
+### Training and Evaluation
+There is two options to training model and evaluate the result.
+```train and eval
+python main.py --result_save_dir <path-to-dir> --EPOCHS 1000 --N_POPULATION 100 --N_BEST 10 --h1 64 --h2 64 --h3 64 --early_stopping 50 --POWER_RATIO 0.5 --CONST 0.8
+python evaluate.py --result_save_dir <path-to-dir> --reference 1 --POWER_RATIO 0.5 --CONST 0.8
+```
+
+or just
+```train
+sh run.sh
+```
+### Pre-trained models
+You can use the pre-trained model without re-training from the beginning.  
+It can be found in 'results' dir and just specify the result_save_dir in evaluate.py argument to it.
+```eval with pre-trained model
+python evaluate.py --result_save_dir results --reference 1 --POWER_RATIO 0.5 --CONST 0.8
+```
+
 
 Methodology
 =======================================
@@ -53,31 +79,6 @@ Experiment and Datasets
 ### Dataset
 ![gain](img/gain.png)
 * Use gain of the channel state information
-
-Usage
-==================
-### Requirements 
-To install requirements:
-```setup
-pip install -r requirements.txt
-```
-### Training and Evaluation
-There is two options to training model and evaluate the result.
-```train and eval
-python main.py --result_save_dir <path-to-dir> --EPOCHS 1000 --N_POPULATION 100 --N_BEST 10 --h1 64 --h2 64 --h3 64 --early_stopping 50 --POWER_RATIO 0.5 --CONST 0.8
-python evaluate.py --result_save_dir <path-to-dir> --reference 1 --POWER_RATIO 0.5 --CONST 0.8
-```
-
-or just
-```train
-sh run.sh
-```
-### Pre-trained models
-You can use the pre-trained model without re-training from the beginning.  
-It can be found in 'results' dir and just specify the result_save_dir in evaluate.py argument to it.
-```eval with pre-trained model
-python evaluate.py --result_save_dir results --reference 1 --POWER_RATIO 0.5 --CONST 0.8
-```
 
 Results
 ==================
