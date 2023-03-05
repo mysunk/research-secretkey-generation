@@ -60,7 +60,7 @@ Based on an early basis, the purpose function determines the suitability of the 
 * Updates the weight of deep learning by optimizing the objective function through genetic algorithms
 * when optimization is over, we use the best deep learning model
 * The objective function to be optimized is as follows
-![objective](img/objective function.png)
+![objective](https://github.com/mysunk/research-secretkey-generation/blob/master/img/objective%20function.png)
 * The resulting characteristics of the generated keys are as follows:
 
 |Correlated|Nonlinearity|  
